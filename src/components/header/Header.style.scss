@@ -1,6 +1,15 @@
 $main-color: #272727;
 $font-color: #fcfcfc;
 
+.header {
+    &__search {
+    }
+
+    &__user-info {
+        display: flex;
+    }
+}
+
 nav {
     background-color: $main-color;
     color: $font-color;

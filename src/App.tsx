@@ -1,7 +1,9 @@
 import React from 'react';
 
 import './App.scss';
-import { CategoryComponent } from './components/category/Category.component';
+import { AuthComponent } from './components/auth/Auth.component';
+// import { ActionButtonComponent } from './components/actionButton/ActionButton.component';
+// import { CategoriesListComponent } from './components/category/CategoriesList.component';
 import { FooterComponent } from './components/footer/Footer.component';
 import { HeaderComponent } from './components/header/Header.component';
 
@@ -10,22 +12,12 @@ function App() {
         <div className="App">
             <HeaderComponent />
 
-            <div className="row category___list">
-                <CategoryComponent />
-                <CategoryComponent />
-                <CategoryComponent />
-                <CategoryComponent />
-                <CategoryComponent />
-                <CategoryComponent />
-                <CategoryComponent />
-                <CategoryComponent />
-                <CategoryComponent />
-                <CategoryComponent />
-                <CategoryComponent />
-                <CategoryComponent />
+            <div className="homepage-content-wrap">
+                {/* <CategoriesListComponent /> */}
+                {/* <ActionButtonComponent /> */}
+                <AuthComponent />
+                <FooterComponent />
             </div>
-
-            <FooterComponent />
         </div>
     );
 }

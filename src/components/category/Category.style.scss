@@ -1,9 +1,29 @@
 $main-color: #272727;
 $font-color: #fcfcfc;
 
-.category__title {
-    padding: 10px;
-    height: 40px;
-    background-color: $main-color;
-    color: $font-color;
+.category {
+    &__item {
+        overflow-x: hidden;
+        overflow-y: auto;
+        white-space: nowrap;
+        height: 100%;
+        min-width: 300px;
+        padding-right: 5px;
+    }
+
+    &__title {
+        padding: 10px;
+        height: 40px;
+        background-color: $main-color;
+        color: $font-color;
+    }
+
+    &__list {
+        display: flex;
+        overflow-x: auto;
+        overflow-y: hidden;
+        white-space: nowrap;
+        height: 100%;
+        margin: 0;
+    }
 }

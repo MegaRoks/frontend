@@ -1,0 +1,9 @@
+$font-color: #FCFCFC;
+
+.input {
+    margin-right: 20px;
+
+    &__value {
+        color: $font-color;
+    }
+}

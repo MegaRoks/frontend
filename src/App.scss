@@ -1,15 +1,7 @@
 .App {
-    display: flex;
-    flex-direction: column;
     height: 100vh;
 }
 
-.container {
-    flex-grow: 1;
-}
-
-.category___list {
-    overflow: auto;
-    width: 100vw;
-    height: 100vh;
+.homepage-content-wrap {
+    height: calc(100% - 119px);
 }

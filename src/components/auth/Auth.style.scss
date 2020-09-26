@@ -1,0 +1,42 @@
+$main-color: #272727;
+$font-color: #fcfcfc;
+
+.auth {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100%;
+
+    &__sing-up {
+        &_form {
+            width: 600px;
+        }
+    }
+
+    &__sing-in {
+        &_form {
+            width: 400px;
+        }
+    }
+
+    &__button {
+        background-color: #00aeef;
+    }
+}
+
+.tabs {
+    width: 300px;
+
+    &__item {
+        background-color: #00aeef;
+
+        &:hover {
+            background-color: #272727;
+        }
+    }
+
+    &__title {
+        color: $font-color !important;
+    }
+}
