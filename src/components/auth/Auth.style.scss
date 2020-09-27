@@ -7,36 +7,40 @@ $font-color: #fcfcfc;
     align-items: center;
     flex-direction: column;
     height: 100%;
+    width: 100%;
 
-    &__sing-up {
+    &__sign-up {
         &_form {
             width: 600px;
         }
     }
 
-    &__sing-in {
+    &__sign-in {
         &_form {
             width: 400px;
         }
     }
 
     &__button {
-        background-color: #00aeef;
-    }
-}
-
-.tabs {
-    width: 300px;
-
-    &__item {
-        background-color: #00aeef;
+        color: $font-color;
+        background-color: #272727;
+        box-shadow: none;
+        border-radius: 0;
 
         &:hover {
-            background-color: #272727;
+            background-color: #00aeef;
+        }
+
+        &:focus {
+            background-color: #00aeef;
         }
     }
 
-    &__title {
-        color: $font-color !important;
+    &__input {
+        padding-left: 8px !important;
+
+        &:focus {
+            border-bottom-color: #00aeef !important;
+        }
     }
 }
