@@ -1,45 +1,43 @@
+import { Observable } from 'rxjs';
+import { ajax } from 'rxjs/ajax';
+
 export class Http {
-    public static async get(url: string): Promise<any> {
-        const headers = this.getHeaders();
-        const config: RequestInit = {
-            headers,
+    private static headers = {
+        'Content-Type': 'application/json',
+        'rxjs-custom-header': 'Rxjs',
+    };
+
+    public static get(url: string): Observable<any> {
+        return ajax({
+            url,
             method: 'GET',
-        };
-        return await this.request(url, config);
+            headers: this.headers,
+        });
     }
 
-    public static async post(url: string, body: any): Promise<any> {
-        const headers = this.getHeaders();
-        const config = {
-            headers,
+    public static post(url: string, body: any): Observable<any> {
+        return ajax({
+            url,
             method: 'POST',
-            body: JSON.stringify(body),
-        };
-        return await this.request(url, config);
+            headers: this.headers,
+            body,
+        });
     }
 
-    public static async put(url: string, body: any): Promise<any> {
-        const headers = this.getHeaders();
-        const config = {
-            headers,
+    public static put(url: string, body: any): Observable<any> {
+        return ajax({
+            url,
             method: 'PUT',
-            body: JSON.stringify(body),
-        };
-        return await this.request(url, config);
+            headers: this.headers,
+            body,
+        });
     }
 
-    private static getHeaders() {
-        return {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer `,
-        };
-    }
-
-    private static async request(url: string, config: RequestInit): Promise<any> {
-        return await fetch(url, config)
-            .then((res) => res.json())
-            .catch((err) => {
-                throw Error(err);
-            });
+    public static delete(url: string): Observable<any> {
+        return ajax({
+            url,
+            method: 'DELETE',
+            headers: this.headers,
+        });
     }
 }

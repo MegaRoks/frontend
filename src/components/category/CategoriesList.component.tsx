@@ -1,23 +1,27 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 
 import './Category.style.scss';
 import { CategoryComponent } from './Category.component';
+import { ActionButtonComponent } from './../actionButton/ActionButton.component';
 
 export const CategoriesListComponent = () => {
     return (
-        <div className="row category__list">
-            <CategoryComponent />
-            <CategoryComponent />
-            <CategoryComponent />
-            <CategoryComponent />
-            <CategoryComponent />
-            <CategoryComponent />
-            <CategoryComponent />
-            <CategoryComponent />
-            <CategoryComponent />
-            <CategoryComponent />
-            <CategoryComponent />
-            <CategoryComponent />
-        </div>
+        <Fragment>
+            <div className="row category__list">
+                <CategoryComponent />
+                <CategoryComponent />
+                <CategoryComponent />
+                <CategoryComponent />
+                <CategoryComponent />
+                <CategoryComponent />
+                <CategoryComponent />
+                <CategoryComponent />
+                <CategoryComponent />
+                <CategoryComponent />
+                <CategoryComponent />
+                <CategoryComponent />
+            </div>
+            <ActionButtonComponent />
+        </Fragment>
     );
 };

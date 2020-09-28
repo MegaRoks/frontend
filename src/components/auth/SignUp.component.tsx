@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
+import { RouteComponentProps } from 'react-router-dom';
 
 import './Auth.style.scss';
 import { useInput } from './Auth.service';
+import { Http } from './../../services/Http.service';
 
-export const SignUpComponent = () => {
+export const SignUpComponent: React.FC<RouteComponentProps> = ({ history }: RouteComponentProps) => {
     useEffect(() => {
         window.M.updateTextFields();
     }, []);
@@ -14,9 +16,29 @@ export const SignUpComponent = () => {
     const inputPassword = useInput('');
     const inputConfirmPassword = useInput('');
 
-    const signUpHandler = async (event: any) => {
+    const signUpHandler = (event: any) => {
         event.preventDefault();
+
         console.log(inputFirstName.value, inputLastName.value, inputEmail.value, inputPassword.value, inputConfirmPassword.value);
+
+        const url = `http://localhost:3000/auth/sign-up`;
+        const body = {
+            firstName: inputFirstName.value,
+            lastName: inputLastName.value,
+            email: inputEmail.value,
+            password: inputPassword.value,
+            passwordConfirmation: inputConfirmPassword.value,
+        };
+
+        Http.post(url, body).subscribe(
+            (res) => {
+                console.log('res: ', res);
+                history.push('/confirm/123');
+            },
+            (error) => {
+                console.log('error: ', error);
+            },
+        );
     };
 
     return (

@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
+import { RouteComponentProps } from 'react-router-dom';
 
 import './Auth.style.scss';
-import { useInput } from './Auth.service';
+import { useInput, useRefInput, Validators } from './Auth.service';
 import { Http } from './../../services/Http.service';
 
-export const SignInComponent = () => {
+export const SignInComponent: React.FC<RouteComponentProps> = ({ history }: RouteComponentProps) => {
     useEffect(() => {
         window.M.updateTextFields();
     }, []);
@@ -12,21 +13,27 @@ export const SignInComponent = () => {
     const inputEmail = useInput('');
     const inputPassword = useInput('');
 
-    const signInHandler = async (event: any) => {
+    // const inputRefEmail = useRefInput(Validators.email);
+    // const inputRefPassword = useRefInput(Validators.required);
+
+    const signInHandler = (event: any) => {
         event.preventDefault();
-        console.log(inputEmail.value, inputPassword.value);
+
         const url = `http://localhost:3000/auth/sign-in`;
         const body = {
             email: inputEmail.value,
             password: inputPassword.value,
         };
-        await Http.post(url, body)
-            .then((res) => {
-                console.log(res);
-            })
-            .catch((err) => {
-                console.error(err);
-            });
+
+        Http.post(url, body).subscribe(
+            (res) => {
+                console.log('res: ', res);
+                history.push('/');
+            },
+            (error) => {
+                console.log('error: ', error);
+            },
+        );
     };
 
     return (
