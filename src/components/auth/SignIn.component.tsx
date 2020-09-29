@@ -1,20 +1,14 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 
 import './Auth.style.scss';
-import { useInput, useRefInput, Validators } from './Auth.service';
+import { useInput } from './Auth.service';
 import { Http } from './../../services/Http.service';
+import { Validators } from './../../services/Validators.service';
 
 export const SignInComponent: React.FC<RouteComponentProps> = ({ history }: RouteComponentProps) => {
-    useEffect(() => {
-        window.M.updateTextFields();
-    }, []);
-
-    const inputEmail = useInput('');
-    const inputPassword = useInput('');
-
-    // const inputRefEmail = useRefInput(Validators.email);
-    // const inputRefPassword = useRefInput(Validators.required);
+    const inputEmail = useInput('', Validators.required, Validators.email, Validators.maxLength(50));
+    const inputPassword = useInput('', Validators.required, Validators.minLength(3), Validators.maxLength(50));
 
     const signInHandler = (event: any) => {
         event.preventDefault();
@@ -36,36 +30,44 @@ export const SignInComponent: React.FC<RouteComponentProps> = ({ history }: Rout
         );
     };
 
+    const submitHandler = (event: any) => {
+        event.preventDefault();
+    };
+
     return (
-        <div className="auth">
+        <div className="auth" onSubmit={submitHandler}>
             <form className="col s12 auth__sign-in_form">
                 <div className="row">
                     <div className="input-field col s12">
                         <input
+                            ref={inputEmail.ref}
                             placeholder="Email"
                             id="email"
                             type="email"
-                            className="auth__input validate"
+                            className="auth__input"
                             value={inputEmail.value}
                             onChange={inputEmail.onChange}
+                            required
                         />
                     </div>
                 </div>
                 <div className="row">
                     <div className="input-field col s12">
                         <input
+                            ref={inputPassword.ref}
                             placeholder="Password"
                             id="password"
                             type="password"
-                            className="auth__input validate"
+                            className="auth__input"
                             value={inputPassword.value}
                             onChange={inputPassword.onChange}
+                            required
                         />
                     </div>
                 </div>
                 <div className="row">
                     <div className="input-field col s12">
-                        <button className="btn auth__button" onClick={signInHandler}>
+                        <button className="btn auth__button" type='submit' onClick={signInHandler}>
                             Sign In
                         </button>
                     </div>

@@ -1,46 +1,34 @@
-import { RefObject, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
-export function useInput(initialValue: any) {
+// interface IFnValidator {
+//     fn(element: HTMLInputElement): boolean;
+// }
+
+export function useInput(initialValue: string | number, ...fns: any[]) {
     const [value, setValue] = useState(initialValue);
+    const ref = useRef<HTMLInputElement>(null);
 
     const onChange = (event: any) => {
         setValue(event.target.value);
+
+        fns && fns.some((fn) => {
+            const state = fn(ref.current);
+
+            if (state) {
+                ref.current?.classList.remove('invalid');
+                ref.current?.classList.add('valid');
+            } else {
+                ref.current?.classList.remove('valid');
+                ref.current?.classList.add('invalid');
+            }
+
+            return !state;
+        });
     };
 
     return {
         value,
         onChange,
+        ref,
     };
-}
-
-export function useRefInput(...args: any[]): RefObject<HTMLInputElement> {
-    const input = useRef<HTMLInputElement>(null);
-
-    args.forEach((fn) => {
-        const state = fn(input.current);
-        console.log('state', state, input.current?.value);
-
-        if (state) {
-            console.log(1);
-            
-            input.current?.setCustomValidity('valid');
-        } else {
-            console.log(2);
-            input.current?.setCustomValidity('invalid');
-            return;
-        }
-    });
-
-    return input;
-}
-
-export class Validators {
-    public static required(element: HTMLInputElement) {
-        return Number(element?.value.length) > 3;
-    }
-
-    public static email(element: HTMLInputElement) {
-        const match = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-        return Boolean(element?.value.match(match));
-    }
 }
