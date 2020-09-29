@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 
 import './Auth.style.scss';
 import { useInput } from './Auth.service';
 import { Http } from './../../services/Http.service';
+import { LoaderComponent } from './../loader/Loader.component';
 
 export const SignUpComponent: React.FC<RouteComponentProps> = ({ history }: RouteComponentProps) => {
     useEffect(() => {
@@ -15,6 +16,8 @@ export const SignUpComponent: React.FC<RouteComponentProps> = ({ history }: Rout
     const inputEmail = useInput('');
     const inputPassword = useInput('');
     const inputConfirmPassword = useInput('');
+
+    const [loader, setLoader] = useState(false);
 
     const signUpHandler = (event: any) => {
         event.preventDefault();
@@ -38,76 +41,83 @@ export const SignUpComponent: React.FC<RouteComponentProps> = ({ history }: Rout
             (error) => {
                 console.log('error: ', error);
             },
+            () => {
+                setLoader(false);
+            },
         );
     };
 
     return (
         <div className="auth">
-            <form className="col s12 auth__sign-up_form">
-                <div className="row">
-                    <div className="input-field col s6">
-                        <input
-                            placeholder="First Name"
-                            id="first_name"
-                            type="text"
-                            className="auth__input validate"
-                            value={inputFirstName.value}
-                            onChange={inputFirstName.onChange}
-                        />
+            {loader ? (
+                <LoaderComponent />
+            ) : (
+                <form className="col s12 auth__sign-up_form">
+                    <div className="row">
+                        <div className="input-field col s6">
+                            <input
+                                placeholder="First Name"
+                                id="first_name"
+                                type="text"
+                                className="auth__input validate"
+                                value={inputFirstName.value}
+                                onChange={inputFirstName.onChange}
+                            />
+                        </div>
+                        <div className="input-field col s6">
+                            <input
+                                placeholder="Last Name"
+                                id="last_name"
+                                type="text"
+                                className="auth__input validate"
+                                value={inputLastName.value}
+                                onChange={inputLastName.onChange}
+                            />
+                        </div>
                     </div>
-                    <div className="input-field col s6">
-                        <input
-                            placeholder="Last Name"
-                            id="last_name"
-                            type="text"
-                            className="auth__input validate"
-                            value={inputLastName.value}
-                            onChange={inputLastName.onChange}
-                        />
+                    <div className="row">
+                        <div className="input-field col s6">
+                            <input
+                                placeholder="Password"
+                                id="password"
+                                type="password"
+                                className="auth__input validate"
+                                value={inputPassword.value}
+                                onChange={inputPassword.onChange}
+                            />
+                        </div>
+                        <div className="input-field col s6">
+                            <input
+                                placeholder="Confirm Password"
+                                id="confirm_password"
+                                type="password"
+                                className="auth__input validate"
+                                value={inputConfirmPassword.value}
+                                onChange={inputConfirmPassword.onChange}
+                            />
+                        </div>
                     </div>
-                </div>
-                <div className="row">
-                    <div className="input-field col s6">
-                        <input
-                            placeholder="Password"
-                            id="password"
-                            type="password"
-                            className="auth__input validate"
-                            value={inputPassword.value}
-                            onChange={inputPassword.onChange}
-                        />
+                    <div className="row">
+                        <div className="input-field col s12">
+                            <input
+                                placeholder="Email"
+                                id="email"
+                                type="email"
+                                className="auth__input validate"
+                                value={inputEmail.value}
+                                onChange={inputEmail.onChange}
+                            />
+                        </div>
                     </div>
-                    <div className="input-field col s6">
-                        <input
-                            placeholder="Confirm Password"
-                            id="confirm_password"
-                            type="password"
-                            className="auth__input validate"
-                            value={inputConfirmPassword.value}
-                            onChange={inputConfirmPassword.onChange}
-                        />
+                    <div className="row">
+                        <div className="input-field col s12">
+                            <button className="btn auth__button" onClick={signUpHandler}>
+                                Sign Up
+                            </button>
+                        </div>
                     </div>
-                </div>
-                <div className="row">
-                    <div className="input-field col s12">
-                        <input
-                            placeholder="Email"
-                            id="email"
-                            type="email"
-                            className="auth__input validate"
-                            value={inputEmail.value}
-                            onChange={inputEmail.onChange}
-                        />
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="input-field col s12">
-                        <button className="btn auth__button" onClick={signUpHandler}>
-                            Sign Up
-                        </button>
-                    </div>
-                </div>
-            </form>
+                </form>
+            )}
         </div>
     );
 };
