@@ -1,28 +1,36 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 
 import './Auth.style.scss';
 import { useInput } from './Auth.service';
 import { Http } from './../../services/Http.service';
 import { LoaderComponent } from './../loader/Loader.component';
+import { Validators } from './../../services/Validators.service';
 
 export const SignUpComponent: React.FC<RouteComponentProps> = ({ history }: RouteComponentProps) => {
-    useEffect(() => {
-        window.M.updateTextFields();
-    }, []);
-
-    const inputFirstName = useInput('');
-    const inputLastName = useInput('');
-    const inputEmail = useInput('');
-    const inputPassword = useInput('');
-    const inputConfirmPassword = useInput('');
+    const inputFirstName = useInput('', Validators.required, Validators.minLength(3), Validators.maxLength(50));
+    const inputLastName = useInput('', Validators.required, Validators.minLength(3), Validators.maxLength(50));
+    const inputEmail = useInput('', Validators.required, Validators.email, Validators.maxLength(50));
+    const inputPassword = useInput(
+        '',
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(50),
+    );
+    const inputConfirmPassword = useInput(
+        '',
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(50),
+        Validators.identical(inputPassword.value),
+    );
 
     const [loader, setLoader] = useState(false);
 
     const signUpHandler = (event: any) => {
         event.preventDefault();
 
-        console.log(inputFirstName.value, inputLastName.value, inputEmail.value, inputPassword.value, inputConfirmPassword.value);
+        
 
         const url = `http://localhost:3000/auth/sign-up`;
         const body = {
@@ -47,12 +55,16 @@ export const SignUpComponent: React.FC<RouteComponentProps> = ({ history }: Rout
         );
     };
 
+    const submitHandler = (event: any) => {
+        event.preventDefault();
+    };
+
     return (
         <div className="auth">
             {loader ? (
                 <LoaderComponent />
             ) : (
-                <form className="col s12 auth__sign-up_form">
+                <form className="col s12 auth__sign-up_form" onSubmit={submitHandler}>
                     <div className="row">
                         <div className="input-field col s6">
                             <input

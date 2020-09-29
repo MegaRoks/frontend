@@ -1,20 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 
 import './Auth.style.scss';
 import { useInput } from './Auth.service';
 import { Http } from './../../services/Http.service';
 import { LoaderComponent } from './../loader/Loader.component';
+import { Validators } from './../../services/Validators.service';
 
 export const SignInComponent: React.FC<RouteComponentProps> = ({ history }: RouteComponentProps) => {
-    useEffect(() => {
-        window.M.updateTextFields();
-    }, []);
-
     const [loader, setLoader] = useState(false);
 
-    const inputEmail = useInput('');
-    const inputPassword = useInput('');
+    const inputEmail = useInput('', Validators.required, Validators.email, Validators.maxLength(50));
+    const inputPassword = useInput('', Validators.required, Validators.minLength(3), Validators.maxLength(50));
 
     const signInHandler = (event: any) => {
         event.preventDefault();
@@ -41,12 +38,16 @@ export const SignInComponent: React.FC<RouteComponentProps> = ({ history }: Rout
         );
     };
 
+    const submitHandler = (event: any) => {
+        event.preventDefault();
+    };
+
     return (
         <div className="auth">
             {loader ? (
                 <LoaderComponent />
             ) : (
-                <form className="col s12 auth__sign-in_form">
+                <form className="col s12 auth__sign-in_form" onSubmit={submitHandler}>
                     <div className="row">
                         <div className="input-field col s12">
                             <input
