@@ -4,33 +4,25 @@ import { RouteComponentProps } from 'react-router-dom';
 import './Auth.style.scss';
 import { useInput } from './Auth.service';
 import { Http } from './../../services/Http.service';
-import { LoaderComponent } from './../loader/Loader.component';
 import { Validators } from './../../services/Validators.service';
+import { LoaderComponent } from './../loader/Loader.component';
 
 export const SignUpComponent: React.FC<RouteComponentProps> = ({ history }: RouteComponentProps) => {
-    const inputFirstName = useInput('', Validators.required, Validators.minLength(3), Validators.maxLength(50));
-    const inputLastName = useInput('', Validators.required, Validators.minLength(3), Validators.maxLength(50));
-    const inputEmail = useInput('', Validators.required, Validators.email, Validators.maxLength(50));
-    const inputPassword = useInput(
-        '',
-        Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(50),
-    );
-    const inputConfirmPassword = useInput(
-        '',
+    const inputFirstName = useInput('', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]);
+    const inputLastName = useInput('', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]);
+    const inputEmail = useInput('', [Validators.required, Validators.email, Validators.maxLength(50)]);
+    const inputPassword = useInput('', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]);
+    const inputConfirmPassword = useInput('', [
         Validators.required,
         Validators.minLength(3),
         Validators.maxLength(50),
         Validators.identical(inputPassword.value),
-    );
+    ]);
 
     const [loader, setLoader] = useState(false);
 
     const signUpHandler = (event: any) => {
         event.preventDefault();
-
-        
 
         const url = `http://localhost:3000/auth/sign-up`;
         const body = {
@@ -71,7 +63,7 @@ export const SignUpComponent: React.FC<RouteComponentProps> = ({ history }: Rout
                                 placeholder="First Name"
                                 id="first_name"
                                 type="text"
-                                className="auth__input validate"
+                                className="auth__input"
                                 value={inputFirstName.value}
                                 onChange={inputFirstName.onChange}
                             />
@@ -81,7 +73,7 @@ export const SignUpComponent: React.FC<RouteComponentProps> = ({ history }: Rout
                                 placeholder="Last Name"
                                 id="last_name"
                                 type="text"
-                                className="auth__input validate"
+                                className="auth__input"
                                 value={inputLastName.value}
                                 onChange={inputLastName.onChange}
                             />
@@ -93,7 +85,7 @@ export const SignUpComponent: React.FC<RouteComponentProps> = ({ history }: Rout
                                 placeholder="Password"
                                 id="password"
                                 type="password"
-                                className="auth__input validate"
+                                className="auth__input"
                                 value={inputPassword.value}
                                 onChange={inputPassword.onChange}
                             />
@@ -103,7 +95,7 @@ export const SignUpComponent: React.FC<RouteComponentProps> = ({ history }: Rout
                                 placeholder="Confirm Password"
                                 id="confirm_password"
                                 type="password"
-                                className="auth__input validate"
+                                className="auth__input"
                                 value={inputConfirmPassword.value}
                                 onChange={inputConfirmPassword.onChange}
                             />
@@ -115,7 +107,7 @@ export const SignUpComponent: React.FC<RouteComponentProps> = ({ history }: Rout
                                 placeholder="Email"
                                 id="email"
                                 type="email"
-                                className="auth__input validate"
+                                className="auth__input"
                                 value={inputEmail.value}
                                 onChange={inputEmail.onChange}
                             />

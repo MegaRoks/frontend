@@ -1,28 +1,31 @@
 import { useRef, useState } from 'react';
 
-// interface IFnValidator {
-//     fn(element: HTMLInputElement): boolean;
-// }
+interface IFnsValidators {
+    (element: HTMLInputElement): boolean;
+}
 
-export function useInput(initialValue: string | number, ...fns: any[]) {
+export function useInput(initialValue: string | number, fnsValidator?: IFnsValidators[]) {
     const [value, setValue] = useState(initialValue);
     const ref = useRef<HTMLInputElement>(null);
 
     const onChange = (event: any) => {
         setValue(event.target.value);
 
-        fns && fns.some((fn) => {
-            const state = fn(ref.current);
+        fnsValidator?.every((fn) => {
+            if (ref.current) {
+                const state = fn(ref.current);
+                if (state) {
+                    ref.current?.classList.remove('invalid');
+                    ref.current?.classList.add('valid');
+                    ref.current?.removeAttribute(`error-${ref.current?.id}`);
+                } else {
+                    ref.current?.classList.remove('valid');
+                    ref.current?.classList.add('invalid');
+                    ref.current?.setAttribute(`error-${ref.current?.id}`, 'true');
+                }
 
-            if (state) {
-                ref.current?.classList.remove('invalid');
-                ref.current?.classList.add('valid');
-            } else {
-                ref.current?.classList.remove('valid');
-                ref.current?.classList.add('invalid');
+                return state;
             }
-
-            return !state;
         });
     };
 
@@ -31,4 +34,22 @@ export function useInput(initialValue: string | number, ...fns: any[]) {
         onChange,
         ref,
     };
+}
+
+export function useButton(...args: any[]) {
+    const fromRef = useRef<HTMLFormElement>(null);
+    const buttonRef = useRef<HTMLButtonElement>(null);
+
+    args.some((arg) => {
+        const isInput = fromRef.current?.getElementsByTagName('input').namedItem(arg.current?.id)?.getAttribute(`error-${arg.current?.id}`);
+        if (isInput) {
+            buttonRef.current?.setAttribute('disabled', 'true');
+        } else {
+            buttonRef.current?.removeAttribute('disabled');
+        }
+
+        return isInput;
+    });
+
+    return { fromRef, buttonRef };
 }
