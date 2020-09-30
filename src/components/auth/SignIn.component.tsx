@@ -1,16 +1,21 @@
-import React, { useState } from 'react';
-import { RouteComponentProps } from 'react-router-dom';
+import React from 'react';
+import { connect } from 'react-redux';
 
 import './Auth.style.scss';
+import { IAuth } from './interfaces';
 import { useInput, useButton } from './Auth.service';
+import { mapDispatchToProps, mapStateToProps } from './reduxProps';
 import { Http } from './../../services/Http.service';
 import { Validators } from './../../services/Validators.service';
 import { LoaderComponent } from './../loader/Loader.component';
+import { InputComponent } from './../UI/input/Input.component';
+import { ButtonComponent } from './../UI/button/Button.component';
 
-export const SignInComponent: React.FC<RouteComponentProps> = ({ history }: RouteComponentProps) => {
-    const [loader, setLoader] = useState(false);
-
-    const inputEmail = useInput('', [Validators.required, Validators.email, Validators.maxLength(50)]);
+export const SignInComponent = connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)(({ error, setError, loader, setLoader, history }: IAuth) => {
+    const inputEmail = useInput('', [Validators.required, Validators.email(), Validators.maxLength(50)]);
     const inputPassword = useInput('', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]);
 
     const formRef = useButton(inputEmail.ref, inputPassword.ref);
@@ -18,12 +23,9 @@ export const SignInComponent: React.FC<RouteComponentProps> = ({ history }: Rout
     const signInHandler = (event: any) => {
         event.preventDefault();
 
-        setLoader(true);
+        setLoader({ isLoader: true });
 
-        inputEmail.onChange(inputEmail.value);
-        inputPassword.onChange(inputPassword.value);
-
-        const url = `http://localhost:3000/auth/sign-in`;
+        const url = `${process.env.SERVER_URL}/auth/sign-in`;
         const body = {
             email: inputEmail.value,
             password: inputPassword.value,
@@ -32,13 +34,18 @@ export const SignInComponent: React.FC<RouteComponentProps> = ({ history }: Rout
         Http.post(url, body).subscribe(
             (res) => {
                 console.log('res: ', res);
+                setLoader({ isLoader: false });
                 history.push('/');
             },
             (error) => {
                 console.log('error: ', error);
-            },
-            () => {
-                setLoader(false);
+                M.toast({ html: error.message });
+
+                setError({
+                    isError: true,
+                    errorMessage: error.message,
+                });
+                setLoader({ isLoader: false });
             },
         );
     };
@@ -49,18 +56,17 @@ export const SignInComponent: React.FC<RouteComponentProps> = ({ history }: Rout
 
     return (
         <div className="auth">
-            {loader ? (
+            {loader.isLoader ? (
                 <LoaderComponent />
             ) : (
                 <form ref={formRef.fromRef} className="col s12 auth__sign-in_form" onSubmit={submitHandler}>
                     <div className="row">
                         <div className="input-field col s12">
-                            <input
-                                ref={inputEmail.ref}
-                                placeholder="Email"
+                            <InputComponent
                                 id="email"
                                 type="email"
-                                className="auth__input"
+                                ref={inputEmail.ref}
+                                placeholder="Email"
                                 value={inputEmail.value}
                                 onChange={inputEmail.onChange}
                             />
@@ -68,12 +74,11 @@ export const SignInComponent: React.FC<RouteComponentProps> = ({ history }: Rout
                     </div>
                     <div className="row">
                         <div className="input-field col s12">
-                            <input
+                            <InputComponent
                                 ref={inputPassword.ref}
                                 placeholder="Password"
                                 id="password"
                                 type="password"
-                                className="auth__input"
                                 value={inputPassword.value}
                                 onChange={inputPassword.onChange}
                             />
@@ -81,13 +86,11 @@ export const SignInComponent: React.FC<RouteComponentProps> = ({ history }: Rout
                     </div>
                     <div className="row">
                         <div className="input-field col s12">
-                            <button className="btn auth__button" ref={formRef.buttonRef} onClick={signInHandler}>
-                                Sign In
-                            </button>
+                            <ButtonComponent id={'btn-sign-in'} type={'submit'} text={'Sign In'} ref={formRef.buttonRef} onClick={signInHandler} />
                         </div>
                     </div>
                 </form>
             )}
         </div>
     );
-};
+});

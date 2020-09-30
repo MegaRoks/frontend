@@ -20,39 +20,5 @@ $font-color: #fcfcfc;
             width: 400px;
         }
     }
-
-    &__button {
-        color: $font-color;
-        background-color: #272727;
-        box-shadow: none;
-        border-radius: 0;
-
-        &:hover {
-            background-color: #00aeef;
-        }
-
-        &:focus {
-            background-color: #00aeef;
-        }
-    }
-
-    &__input {
-        padding-left: 8px !important;
-
-        &:focus {
-            border-bottom-color: #00aeef !important;
-        }
-    }
 }
 
-.valid {
-    border-bottom: 1px solid #4caf50;
-    -webkit-box-shadow: 0 1px 0 0 #4caf50;
-    box-shadow: 0 1px 0 0 #4caf50;
-}
-
-.invalid {
-    border-bottom: 1px solid #f44336;
-    -webkit-box-shadow: 0 1px 0 0 #f44336;
-    box-shadow: 0 1px 0 0 #f44336;
-}

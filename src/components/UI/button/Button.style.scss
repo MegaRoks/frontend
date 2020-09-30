@@ -1,0 +1,17 @@
+$main-color: #272727;
+$font-color: #fcfcfc;
+
+.button {
+    color: $font-color;
+    background-color: #272727;
+    box-shadow: none;
+    border-radius: 0;
+
+    &:hover {
+        background-color: #00aeef;
+    }
+
+    &:focus {
+        background-color: #00aeef;
+    }
+}
