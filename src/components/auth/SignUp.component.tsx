@@ -76,7 +76,7 @@ export const SignUpComponent: React.FC<IAuth> = connect(
                             <InputComponent
                                 id="first_name"
                                 type="text"
-                                ref={inputFirstName.ref}
+                                inputRef={inputFirstName.ref}
                                 placeholder="First Name"
                                 value={inputFirstName.value}
                                 onChange={inputFirstName.onChange}
@@ -86,7 +86,7 @@ export const SignUpComponent: React.FC<IAuth> = connect(
                             <InputComponent
                                 id="last_name"
                                 type="text"
-                                ref={inputLastName.ref}
+                                inputRef={inputLastName.ref}
                                 placeholder="Last Name"
                                 value={inputLastName.value}
                                 onChange={inputLastName.onChange}
@@ -98,7 +98,7 @@ export const SignUpComponent: React.FC<IAuth> = connect(
                             <InputComponent
                                 id="password"
                                 type="password"
-                                ref={inputPassword.ref}
+                                inputRef={inputPassword.ref}
                                 placeholder="Password"
                                 value={inputPassword.value}
                                 onChange={inputPassword.onChange}
@@ -108,7 +108,7 @@ export const SignUpComponent: React.FC<IAuth> = connect(
                             <InputComponent
                                 id="confirm_password"
                                 type="password"
-                                ref={inputConfirmPassword.ref}
+                                inputRef={inputConfirmPassword.ref}
                                 placeholder="Confirm Password"
                                 value={inputConfirmPassword.value}
                                 onChange={inputConfirmPassword.onChange}
@@ -120,7 +120,7 @@ export const SignUpComponent: React.FC<IAuth> = connect(
                             <InputComponent
                                 id="email"
                                 type="email"
-                                ref={inputEmail.ref}
+                                inputRef={inputEmail.ref}
                                 placeholder="Email"
                                 value={inputEmail.value}
                                 onChange={inputEmail.onChange}
@@ -129,7 +129,13 @@ export const SignUpComponent: React.FC<IAuth> = connect(
                     </div>
                     <div className="row">
                         <div className="input-field col s12">
-                            <ButtonComponent id={'btn-sign-up'} type={'submit'} text={'Sign Up'} ref={formRef.buttonRef} onClick={signUpHandler} />
+                            <ButtonComponent
+                                id={'btn-sign-up'}
+                                type={'submit'}
+                                text={'Sign Up'}
+                                buttonRef={formRef.buttonRef}
+                                onClick={signUpHandler}
+                            />
                         </div>
                     </div>
                 </form>

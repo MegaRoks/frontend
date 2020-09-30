@@ -54,6 +54,8 @@ export const SignInComponent = connect(
         event.preventDefault();
     };
 
+    console.log(inputEmail.ref);
+    
     return (
         <div className="auth">
             {loader.isLoader ? (
@@ -65,7 +67,7 @@ export const SignInComponent = connect(
                             <InputComponent
                                 id="email"
                                 type="email"
-                                ref={inputEmail.ref}
+                                inputRef={inputEmail.ref}
                                 placeholder="Email"
                                 value={inputEmail.value}
                                 onChange={inputEmail.onChange}
@@ -75,7 +77,7 @@ export const SignInComponent = connect(
                     <div className="row">
                         <div className="input-field col s12">
                             <InputComponent
-                                ref={inputPassword.ref}
+                                inputRef={inputPassword.ref}
                                 placeholder="Password"
                                 id="password"
                                 type="password"
@@ -86,7 +88,13 @@ export const SignInComponent = connect(
                     </div>
                     <div className="row">
                         <div className="input-field col s12">
-                            <ButtonComponent id={'btn-sign-in'} type={'submit'} text={'Sign In'} ref={formRef.buttonRef} onClick={signInHandler} />
+                            <ButtonComponent
+                                id={'btn-sign-in'}
+                                type={'submit'}
+                                text={'Sign In'}
+                                buttonRef={formRef.buttonRef}
+                                onClick={signInHandler}
+                            />
                         </div>
                     </div>
                 </form>

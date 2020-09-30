@@ -24,7 +24,10 @@ export class Validators {
     }
 
     public static email(match: RegExp = this.emailMatch) {
+        
+        
         return function (element: HTMLInputElement): boolean {
+            console.log(match);
             return Boolean(element?.value.match(match));
         };
     }
