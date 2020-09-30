@@ -2,7 +2,7 @@ import React from 'react';
 
 import './Loader.style.scss';
 
-export const LoaderComponent = () => {
+export const LoaderComponent: React.FC = () => {
     return (
         <div className="loader">
             <div className="preloader-wrapper big active">

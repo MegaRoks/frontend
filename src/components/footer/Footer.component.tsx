@@ -2,7 +2,7 @@ import React from 'react';
 
 import './Footer.style.scss';
 
-export const FooterComponent = () => {
+export const FooterComponent: React.FC = () => {
     return (
         <footer className="page-footer">
             <div className="footer-copyright">

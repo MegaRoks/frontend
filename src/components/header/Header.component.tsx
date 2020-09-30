@@ -4,7 +4,7 @@ import { Link, NavLink } from 'react-router-dom';
 import './Header.style.scss';
 // import { InputComponent } from './../Input/Input.component';
 
-export const HeaderComponent = () => {
+export const HeaderComponent: React.FC = () => {
     return (
         <header>
             <nav>
