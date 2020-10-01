@@ -14,7 +14,7 @@ import { ButtonComponent } from './../UI/button/Button.component';
 export const SignInComponent = connect(
     mapStateToProps,
     mapDispatchToProps,
-)(({ error, setError, loader, setLoader, history }: IAuth) => {
+)(({ error, setError, loader, setLoader, history, auth, setAuth }: IAuth) => {
     const inputEmail = useInput('', [Validators.required, Validators.email(), Validators.maxLength(50)]);
     const inputPassword = useInput('', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]);
 
@@ -25,7 +25,12 @@ export const SignInComponent = connect(
 
         setLoader({ isLoader: true });
 
+        console.log(process.env.SERVER_URL);
+        
+
         const url = `${process.env.SERVER_URL}/auth/sign-in`;
+
+        console.log(url);
         const body = {
             email: inputEmail.value,
             password: inputPassword.value,
@@ -34,6 +39,10 @@ export const SignInComponent = connect(
         Http.post(url, body).subscribe(
             (res) => {
                 console.log('res: ', res);
+                setAuth({
+                    isAuth: true,
+                    token: res.token,
+                });
                 setLoader({ isLoader: false });
                 history.push('/');
             },
@@ -54,8 +63,6 @@ export const SignInComponent = connect(
         event.preventDefault();
     };
 
-    console.log(inputEmail.ref);
-    
     return (
         <div className="auth">
             {loader.isLoader ? (
