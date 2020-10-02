@@ -1,10 +1,10 @@
-import { IActionCreator } from '../../interfaces';
-import { IAuthPayload } from '../../interfaces/authInterfaces';
-import { SET_AUTH } from '../../types/auhTypes';
+import { IActionCreator } from './../../interfaces';
+import { IAuthPayload } from './../../interfaces/authInterfaces';
+import { SET_AUTH } from './../../types/auhTypes';
 
 const initialState: IAuthPayload = {
     isAuth: false,
-    token: '',
+    token: null,
 };
 
 export const authReducer = (state: IAuthPayload = initialState, action: IActionCreator<IAuthPayload>): IAuthPayload => {

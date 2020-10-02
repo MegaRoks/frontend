@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import './Auth.style.scss';
 import { useButton, useInput } from './Auth.service';
-import { IAuth } from './interfaces';
+import { IAuthProps } from './interfaces';
 import { mapDispatchToProps, mapStateToProps } from './reduxProps';
 import { Http } from './../../services/Http.service';
 import { Validators } from './../../services/Validators.service';
@@ -11,10 +11,10 @@ import { LoaderComponent } from './../loader/Loader.component';
 import { InputComponent } from './../UI/input/Input.component';
 import { ButtonComponent } from './../UI/button/Button.component';
 
-export const SignUpComponent: React.FC<IAuth> = connect(
+export const SignUpComponent: React.FC<IAuthProps> = connect(
     mapStateToProps,
     mapDispatchToProps,
-)(({ error, setError, loader, setLoader, history }: IAuth) => {
+)(({ setError, loaderState, setLoader, history }: IAuthProps) => {
     const inputFirstName = useInput('', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]);
     const inputLastName = useInput('', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]);
     const inputEmail = useInput('', [Validators.required, Validators.email(), Validators.maxLength(50)]);
@@ -30,9 +30,7 @@ export const SignUpComponent: React.FC<IAuth> = connect(
 
     const signUpHandler = (event: any) => {
         event.preventDefault();
-
         setLoader({ isLoader: true });
-
         const url = `${process.env.SERVER_URL}/auth/sign-up`;
         const body = {
             firstName: inputFirstName.value,
@@ -49,9 +47,7 @@ export const SignUpComponent: React.FC<IAuth> = connect(
                 history.push('/confirm');
             },
             (error) => {
-                console.log('error: ', error);
                 M.toast({ html: error.message });
-
                 setError({
                     isError: true,
                     errorMessage: error.message,
@@ -61,16 +57,12 @@ export const SignUpComponent: React.FC<IAuth> = connect(
         );
     };
 
-    const submitHandler = (event: any) => {
-        event.preventDefault();
-    };
-
     return (
         <div className="auth">
-            {loader.isLoader ? (
+            {loaderState.isLoader ? (
                 <LoaderComponent />
             ) : (
-                <form className="col s12 auth__sign-up_form" ref={formRef.fromRef} onSubmit={submitHandler}>
+                <form className="col s12 auth__sign-up_form" ref={formRef.fromRef} onSubmit={signUpHandler}>
                     <div className="row">
                         <div className="input-field col s6">
                             <InputComponent

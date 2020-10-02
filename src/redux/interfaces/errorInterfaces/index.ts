@@ -1,4 +1,4 @@
 export interface IErrorPayload {
     readonly isError: boolean;
-    readonly errorMessage: string;
+    readonly errorMessage: string | null;
 }

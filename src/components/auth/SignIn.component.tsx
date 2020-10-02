@@ -2,54 +2,47 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import './Auth.style.scss';
-import { IAuth } from './interfaces';
+import { IAuthProps } from './interfaces';
 import { useInput, useButton } from './Auth.service';
 import { mapDispatchToProps, mapStateToProps } from './reduxProps';
 import { Http } from './../../services/Http.service';
+import { Jwt } from './../../services/Jwt.service';
 import { Validators } from './../../services/Validators.service';
 import { LoaderComponent } from './../loader/Loader.component';
 import { InputComponent } from './../UI/input/Input.component';
 import { ButtonComponent } from './../UI/button/Button.component';
+import { IUser } from './../../interfaces';
 
-export const SignInComponent = connect(
+export const SignInComponent: React.FC<IAuthProps> = connect(
     mapStateToProps,
     mapDispatchToProps,
-)(({ error, setError, loader, setLoader, history, auth, setAuth }: IAuth) => {
+)(({ setError, loaderState, setLoader, history, setAuth, setUser }: IAuthProps) => {
     const inputEmail = useInput('', [Validators.required, Validators.email(), Validators.maxLength(50)]);
     const inputPassword = useInput('', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]);
-
     const formRef = useButton(inputEmail.ref, inputPassword.ref);
 
     const signInHandler = (event: any) => {
         event.preventDefault();
-
         setLoader({ isLoader: true });
-
-        console.log(process.env.SERVER_URL);
-        
-
-        const url = `${process.env.SERVER_URL}/auth/sign-in`;
-
-        console.log(url);
+        const url = `${process.env.REACT_APP_SERVER_URL}/auth/sign-in`;
         const body = {
             email: inputEmail.value,
             password: inputPassword.value,
         };
 
         Http.post(url, body).subscribe(
-            (res) => {
-                console.log('res: ', res);
+            ({ response }) => {
+                const { user } = Jwt.decode<IUser>(response.token);
+                setUser({ user });
                 setAuth({
                     isAuth: true,
-                    token: res.token,
+                    token: response.token,
                 });
                 setLoader({ isLoader: false });
                 history.push('/');
             },
             (error) => {
-                console.log('error: ', error);
                 M.toast({ html: error.message });
-
                 setError({
                     isError: true,
                     errorMessage: error.message,
@@ -59,16 +52,12 @@ export const SignInComponent = connect(
         );
     };
 
-    const submitHandler = (event: any) => {
-        event.preventDefault();
-    };
-
     return (
         <div className="auth">
-            {loader.isLoader ? (
+            {loaderState.isLoader ? (
                 <LoaderComponent />
             ) : (
-                <form ref={formRef.fromRef} className="col s12 auth__sign-in_form" onSubmit={submitHandler}>
+                <form ref={formRef.fromRef} className="col s12 auth__sign-in_form" onSubmit={signInHandler}>
                     <div className="row">
                         <div className="input-field col s12">
                             <InputComponent

@@ -1,10 +1,10 @@
-import { IActionCreator } from '../../interfaces';
+import { IActionCreator } from './../../interfaces';
 import { SET_ERROR } from './../../types/errorTypes';
 import { IErrorPayload } from './../../interfaces/errorInterfaces';
 
 const initialState: IErrorPayload = {
     isError: false,
-    errorMessage: '',
+    errorMessage: null,
 };
 
 export const errorReducer = (state: IErrorPayload = initialState, action: IActionCreator<IErrorPayload>): IErrorPayload => {

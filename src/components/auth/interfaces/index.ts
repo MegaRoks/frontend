@@ -2,13 +2,13 @@ import { RouteComponentProps } from 'react-router-dom';
 
 import { ILoaderPayload } from './../../../redux/interfaces/loaderInterfaces';
 import { IErrorPayload } from './../../../redux/interfaces/errorInterfaces';
-import { IAuthPayload } from '../../../redux/interfaces/authInterfaces';
+import { IAuthPayload } from './../../../redux/interfaces/authInterfaces';
+import { IUserPayload } from './../../../redux/interfaces/userInterfaces';
 
-export interface IAuth extends RouteComponentProps {
-    readonly error: IErrorPayload;
+export interface IAuthProps extends RouteComponentProps {
+    readonly loaderState: ILoaderPayload;
     setError(payload: IErrorPayload): void;
-    readonly loader: ILoaderPayload;
     setLoader(payload: ILoaderPayload): void;
-    readonly auth: IAuthPayload;
     setAuth(payload: IAuthPayload): void;
+    setUser(payload: IUserPayload): void;
 }
