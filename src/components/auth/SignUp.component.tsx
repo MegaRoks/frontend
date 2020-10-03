@@ -28,8 +28,7 @@ export const SignUpComponent: React.FC<IAuthProps> = connect(
 
     const formRef = useButton(inputFirstName.ref, inputLastName.ref, inputEmail.ref, inputPassword.ref, inputConfirmPassword.ref);
 
-    const signUpHandler = (event: any) => {
-        event.preventDefault();
+    const signUpHandler = () => {
         setLoader({ isLoader: true });
         const url = `${process.env.SERVER_URL}/auth/sign-up`;
         const body = {
@@ -120,7 +119,7 @@ export const SignUpComponent: React.FC<IAuthProps> = connect(
                         </div>
                     </div>
                     <div className="row">
-                        <div className="input-field col s12">
+                        <div className="input-field col s4">
                             <ButtonComponent
                                 id={'btn-sign-up'}
                                 type={'submit'}

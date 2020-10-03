@@ -21,8 +21,7 @@ export const SignInComponent: React.FC<IAuthProps> = connect(
     const inputPassword = useInput('', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]);
     const formRef = useButton(inputEmail.ref, inputPassword.ref);
 
-    const signInHandler = (event: any) => {
-        event.preventDefault();
+    const signInHandler = () => {
         setLoader({ isLoader: true });
         const url = `${process.env.REACT_APP_SERVER_URL}/auth/sign-in`;
         const body = {
@@ -83,7 +82,7 @@ export const SignInComponent: React.FC<IAuthProps> = connect(
                         </div>
                     </div>
                     <div className="row">
-                        <div className="input-field col s12">
+                        <div className="input-field col s6">
                             <ButtonComponent
                                 id={'btn-sign-in'}
                                 type={'submit'}
