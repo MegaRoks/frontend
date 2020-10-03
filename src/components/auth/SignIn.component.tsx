@@ -7,6 +7,7 @@ import { useInput, useButton } from './Auth.service';
 import { mapDispatchToProps, mapStateToProps } from './reduxProps';
 import { Http } from './../../services/Http.service';
 import { Jwt } from './../../services/Jwt.service';
+import { Socket } from './../../services/Socket.service';
 import { Validators } from './../../services/Validators.service';
 import { LoaderComponent } from './../loader/Loader.component';
 import { InputComponent } from './../UI/input/Input.component';
@@ -38,6 +39,7 @@ export const SignInComponent: React.FC<IAuthProps> = connect(
                     token: response.token,
                 });
                 setLoader({ isLoader: false });
+                Socket.connect(response.token);
                 history.push('/dashboard');
             },
             (error) => {

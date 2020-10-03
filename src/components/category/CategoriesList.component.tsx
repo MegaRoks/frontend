@@ -1,12 +1,30 @@
-import React, { Fragment, useRef, useState } from 'react';
+import React, { Fragment, useEffect, useRef, useState } from 'react';
 
 import './Category.style.scss';
 import { CategoryComponent } from './Category.component';
 import { ActionButtonComponent } from './../actionButton/ActionButton.component';
 import { ButtonComponent } from './../UI/button/Button.component';
 import { InputComponent } from '../UI/input/Input.component';
+import { Socket } from './../../services/Socket.service';
 
 export const CategoriesListComponent: React.FC = () => {
+    useEffect(() => {
+        Socket.emit('getCategoriesList');
+        const categoriesList$ = Socket.on('gotCategoriesList');
+        categoriesList$.subscribe(
+            (res) => {
+                console.log('CategoriesList', res);
+            },
+            (err) => {
+                console.error('err', err);
+            },
+        );
+
+        return () => {
+            Socket.removeEventListener('gotCategoriesList');
+        };
+    }, []);
+
     const [isShowInput, setIsShowInput] = useState(false);
     const [value, setValue] = useState('');
     const inputRef = useRef<HTMLInputElement>(null);
@@ -21,9 +39,25 @@ export const CategoriesListComponent: React.FC = () => {
         setValue('');
     };
 
-    const categoryCreating = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const categoryCreating = () => {
         setIsShowInput(false);
         setValue('');
+        Socket.emit('createCategory', { title: value });
+        const category$ = Socket.on('createdCategory');
+        category$
+            .subscribe(
+                (res) => {
+                    console.log('New Category', res);
+                },
+                (err) => {
+                    console.error('err', err);
+                },
+            )
+            .unsubscribe();
+
+        return () => {
+            Socket.removeEventListener('createdCategory');
+        };
     };
 
     return (
