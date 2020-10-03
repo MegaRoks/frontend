@@ -1,16 +1,17 @@
 import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { connect } from 'react-redux';
 
 import './Header.style.scss';
-import { InputComponent } from './../UI/input/Input.component';
-import { IHeaderProps } from './interfaces';
-import { mapDispatchToProps, mapStateToProps } from './reduxProps';
+import { connector, IHeaderProps } from './componentProps';
 
-export const HeaderComponent: React.FC<IHeaderProps> = connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(({ authState, userState }: IHeaderProps) => {
+export const HeaderComponent = connector(({ authState, setAuth, userState }: IHeaderProps) => {
+    const logout = () => {
+        setAuth({
+            isAuth: false,
+            token: null,
+        });
+    };
+
     return (
         <header>
             <nav>
@@ -21,12 +22,15 @@ export const HeaderComponent: React.FC<IHeaderProps> = connect(
 
                     {authState.isAuth ? (
                         <ul id="nav-mobile" className="right hide-on-med-and-down">
-                            <li className="header__search">
-                                <InputComponent id={'search'} type={'text'} placeholder={'Search'} />
+                            <li className="header__user-info">
+                                <NavLink to="/dashboard">
+                                    {userState.user?.firstName} {userState.user?.lastName}
+                                </NavLink>
                             </li>
                             <li className="header__user-info">
-                                {(userState.user?.firstName, userState.user?.lastName)}
-                                <a href="/">Log Out</a>
+                                <NavLink to="/auth/sign-in" onClick={logout}>
+                                    Log Out
+                                </NavLink>
                             </li>
                         </ul>
                     ) : (

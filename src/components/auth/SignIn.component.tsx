@@ -39,7 +39,7 @@ export const SignInComponent: React.FC<IAuthProps> = connect(
                     token: response.token,
                 });
                 setLoader({ isLoader: false });
-                history.push('/');
+                history.push('/dashboard');
             },
             (error) => {
                 M.toast({ html: error.message });

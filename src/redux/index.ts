@@ -11,3 +11,5 @@ export const rootReducer = combineReducers({
     loaderState: loaderReducer,
     userState: userReducer,
 });
+
+export type RootStateType = ReturnType<typeof rootReducer>;
