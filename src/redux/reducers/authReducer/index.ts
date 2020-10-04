@@ -1,17 +1,22 @@
 import { IActionCreator } from './../../interfaces';
-import { IAuthPayload } from './../../interfaces/authInterfaces';
-import { SET_AUTH } from './../../types/auhTypes';
+import { IAuthPayload, IAuthState } from './../../interfaces/authInterfaces';
+import { LOGIN, LOGOUT } from './../../types/authTypes';
 
-const initialState: IAuthPayload = {
+const initialState: IAuthState = {
     isAuth: false,
     token: null,
 };
 
-export const authReducer = (state: IAuthPayload = initialState, action: IActionCreator<IAuthPayload>): IAuthPayload => {
+export const authReducer = (state: IAuthState = initialState, action: IActionCreator<IAuthPayload>): IAuthState => {
     switch (action.type) {
-        case SET_AUTH:
+        case LOGIN:
             return {
-                isAuth: action.payload.isAuth,
+                isAuth: true,
+                token: action.payload.token,
+            };
+        case LOGOUT:
+            return {
+                isAuth: false,
                 token: action.payload.token,
             };
         default:

@@ -1,10 +1,8 @@
 import React from 'react';
-import { connect } from 'react-redux';
 
 import './Auth.style.scss';
-import { IAuthProps } from './interfaces';
 import { useInput, useButton } from './Auth.service';
-import { mapDispatchToProps, mapStateToProps } from './reduxProps';
+import { connector, IAuthProps } from './componentProps';
 import { Http } from './../../services/Http.service';
 import { Jwt } from './../../services/Jwt.service';
 import { Socket } from './../../services/Socket.service';
@@ -12,12 +10,10 @@ import { Validators } from './../../services/Validators.service';
 import { LoaderComponent } from './../loader/Loader.component';
 import { InputComponent } from './../UI/input/Input.component';
 import { ButtonComponent } from './../UI/button/Button.component';
-import { IUser } from './../../interfaces';
+import { IUser } from './../../interfaces/userInterfaces';
 
-export const SignInComponent: React.FC<IAuthProps> = connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(({ setError, loaderState, setLoader, history, setAuth, setUser }: IAuthProps) => {
+
+export const SignInComponent: React.FC<IAuthProps> = connector(({ setError, loaderState, setLoader, history, login, setUser }: IAuthProps) => {
     const inputEmail = useInput('', [Validators.required, Validators.email(), Validators.maxLength(50)]);
     const inputPassword = useInput('', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]);
     const formRef = useButton(inputEmail.ref, inputPassword.ref);
@@ -34,10 +30,7 @@ export const SignInComponent: React.FC<IAuthProps> = connect(
             ({ response }) => {
                 const { user } = Jwt.decode<IUser>(response.token);
                 setUser({ user });
-                setAuth({
-                    isAuth: true,
-                    token: response.token,
-                });
+                login({ token: response.token });
                 setLoader({ isLoader: false });
                 Socket.connect(response.token);
                 history.push('/dashboard');

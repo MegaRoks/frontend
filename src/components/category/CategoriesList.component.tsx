@@ -2,18 +2,21 @@ import React, { Fragment, useEffect, useRef, useState } from 'react';
 
 import './Category.style.scss';
 import { CategoryComponent } from './Category.component';
+import { connector, ICategoryProps } from './componentProps';
 import { ActionButtonComponent } from './../actionButton/ActionButton.component';
 import { ButtonComponent } from './../UI/button/Button.component';
-import { InputComponent } from '../UI/input/Input.component';
+import { InputComponent } from './../UI/input/Input.component';
 import { Socket } from './../../services/Socket.service';
+import { ICategory } from './../../interfaces/categoryInterfaces';
 
-export const CategoriesListComponent: React.FC = () => {
+export const CategoriesListComponent: React.FC = connector(({ categoryState, setCategoriesList, addCategory }: ICategoryProps) => {
     useEffect(() => {
         Socket.emit('getCategoriesList');
-        const categoriesList$ = Socket.on('gotCategoriesList');
+        const categoriesList$ = Socket.on<{ total: number; categories: ICategory[] }>('gotCategoriesList');
         categoriesList$.subscribe(
-            (res) => {
-                console.log('CategoriesList', res);
+            ({ categories }) => {
+                console.log('CategoriesList', categories);
+                setCategoriesList({ categories });
             },
             (err) => {
                 console.error('err', err);
@@ -23,7 +26,7 @@ export const CategoriesListComponent: React.FC = () => {
         return () => {
             Socket.removeEventListener('gotCategoriesList');
         };
-    }, []);
+    }, [setCategoriesList]);
 
     const [isShowInput, setIsShowInput] = useState(false);
     const [value, setValue] = useState('');
@@ -43,38 +46,24 @@ export const CategoriesListComponent: React.FC = () => {
         setIsShowInput(false);
         setValue('');
         Socket.emit('createCategory', { title: value });
-        const category$ = Socket.on('createdCategory');
-        category$
-            .subscribe(
-                (res) => {
-                    console.log('New Category', res);
-                },
-                (err) => {
-                    console.error('err', err);
-                },
-            )
-            .unsubscribe();
-
-        return () => {
-            Socket.removeEventListener('createdCategory');
-        };
+        const category$ = Socket.on<ICategory>('createdCategory');
+        category$.subscribe(
+            (res) => {
+                console.log('New Category', res);
+                addCategory({ category: res });
+            },
+            (err) => {
+                console.error('err', err);
+            },
+        );
     };
 
     return (
         <Fragment>
             <div className="row category category__list">
-                <CategoryComponent />
-                <CategoryComponent />
-                {/* <CategoryComponent />
-                <CategoryComponent />
-                <CategoryComponent />
-                <CategoryComponent />
-                <CategoryComponent />
-                <CategoryComponent />
-                <CategoryComponent />
-                <CategoryComponent />
-                <CategoryComponent />
-                <CategoryComponent /> */}
+                {categoryState.categoriesList.map((category) => (
+                    <CategoryComponent key={category.id} />
+                ))}
 
                 <div className="col s12 m3 category__item">
                     {isShowInput ? (
@@ -102,4 +91,4 @@ export const CategoriesListComponent: React.FC = () => {
             <ActionButtonComponent />
         </Fragment>
     );
-};
+});

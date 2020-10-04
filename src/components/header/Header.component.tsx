@@ -4,12 +4,9 @@ import { Link, NavLink } from 'react-router-dom';
 import './Header.style.scss';
 import { connector, IHeaderProps } from './componentProps';
 
-export const HeaderComponent = connector(({ authState, setAuth, userState }: IHeaderProps) => {
-    const logout = () => {
-        setAuth({
-            isAuth: false,
-            token: null,
-        });
+export const HeaderComponent = connector(({ authState, logout, userState }: IHeaderProps) => {
+    const logoutHandler = () => {
+        logout({ token: null });
     };
 
     return (
@@ -28,7 +25,7 @@ export const HeaderComponent = connector(({ authState, setAuth, userState }: IHe
                                 </NavLink>
                             </li>
                             <li className="header__user-info">
-                                <NavLink to="/auth/sign-in" onClick={logout}>
+                                <NavLink to="/auth/sign-in" onClick={logoutHandler}>
                                     Log Out
                                 </NavLink>
                             </li>
