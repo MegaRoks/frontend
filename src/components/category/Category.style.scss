@@ -26,17 +26,4 @@ $font-color: #fcfcfc;
         height: 100%;
         margin: 0;
     }
-
-    &__input {
-        background-color: $main-color;
-        margin-top: 0.5rem;
-        padding-right: 0.75rem;
-        padding-left: 0.75rem;
-        padding-bottom: 0.75rem;
-    }
-
-    &__button {
-        display: flex;
-        margin-top: 0.5rem;
-    }
 }

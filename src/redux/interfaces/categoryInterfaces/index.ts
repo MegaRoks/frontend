@@ -8,7 +8,6 @@ export interface ICategoriesPayload {
     readonly categories: ICategory[];
 }
 
-
 export interface ICategoriesState {
     readonly categoriesList: ICategory[];
 }

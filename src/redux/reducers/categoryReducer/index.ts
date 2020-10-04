@@ -1,6 +1,6 @@
 import { IActionCreator } from './../../interfaces';
 import { ICategoriesPayload, ICategoriesState, ICategoryPayload } from './../../interfaces/categoryInterfaces';
-import { SET_CATEGORY_LIST, ADD_CATEGORY, REMOVE_CATEGORY, UPDATE_CATEGORY } from './../../types/categoryTypes';
+import { SET_CATEGORIES_LIST, ADD_CATEGORY, REMOVE_CATEGORY, UPDATE_CATEGORY } from './../../types/categoryTypes';
 
 const initialState: ICategoriesState = {
     categoriesList: [],
@@ -11,7 +11,7 @@ export const categoryReducer = (
     action: IActionCreator<ICategoryPayload & ICategoriesPayload>,
 ): ICategoriesState => {
     switch (action.type) {
-        case SET_CATEGORY_LIST:
+        case SET_CATEGORIES_LIST:
             return {
                 categoriesList: action.payload.categories,
             };

@@ -5,47 +5,47 @@ import { InputComponent } from './../UI/input/Input.component';
 
 import './AddButton.style.scss';
 
-export const AddButtonComponent: React.FC<any> = ({ onCreate }) => {
+export const AddButtonComponent: React.FC<any> = ({ text, placeholder, onCreate }) => {
     const [isShowInput, setIsShowInput] = useState(false);
     const [value, setValue] = useState('');
     const inputRef = useRef<HTMLInputElement>(null);
 
-    const showFormCategoryCreating = () => {
+    const showForm = () => {
         setIsShowInput(true);
         inputRef.current?.focus();
     };
 
-    const cancelCategoryCreating = () => {
+    const cancel = () => {
         setIsShowInput(false);
         setValue('');
     };
 
-    const categoryCreating = () => {
+    const creating = () => {
+        onCreate(value);
         setIsShowInput(false);
         setValue('');
-        onCreate(value);
     };
 
     return (
         <Fragment>
             {isShowInput ? (
-                <div className="category__input">
+                <div className="patel__input">
                     <InputComponent
-                        id="category_name"
+                        id="name"
                         type="text"
                         inputRef={inputRef}
-                        placeholder="Enter Title"
+                        placeholder={placeholder}
                         value={value}
                         onChange={(event) => setValue(event.target.value)}
                     />
-                    <div className="category__button">
-                        <ButtonComponent id={'create-btn'} type={'button'} onClick={cancelCategoryCreating} text={'Cancel'} />
-                        <ButtonComponent id={'create-btn'} type={'button'} onClick={categoryCreating} text={'Create'} />
+                    <div className="patel__button">
+                        <ButtonComponent id={'create-btn'} type={'button'} onClick={cancel} text={'Cancel'} />
+                        <ButtonComponent id={'create-btn'} type={'button'} onClick={creating} text={'Create'} />
                     </div>
                 </div>
             ) : (
-                <div className="category__button">
-                    <ButtonComponent id={'create-btn'} type={'button'} onClick={showFormCategoryCreating} text={'Create Category'} />
+                <div className="patel__button">
+                    <ButtonComponent id={'create-btn'} type={'button'} onClick={showForm} text={text} />
                 </div>
             )}
         </Fragment>

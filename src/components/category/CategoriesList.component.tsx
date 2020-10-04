@@ -1,21 +1,36 @@
 import React, { Fragment, useEffect } from 'react';
+import { take } from 'rxjs/operators';
 
 import './Category.style.scss';
-import { connector, ICategoryProps } from './componentProps';
+import { connector, ICategoriesListProps } from './componentProps';
 import { ActionButtonComponent } from './../actionButton/ActionButton.component';
 import { Socket } from './../../services/Socket.service';
 import { ICategory } from './../../interfaces/categoryInterfaces';
+import { ITodo } from './../../interfaces/todoInterfaces';
 import { AddButtonComponent } from './../addButton/AddButton.component';
-import { TodoComponent } from './../todo/Todo.component';
+import { CategoryComponent } from './Category.component';
 
-export const CategoriesListComponent: React.FC = connector(({ authState, categoryState, setCategoriesList, addCategory }: ICategoryProps) => {
+export const CategoriesListComponent: React.FC<ICategoriesListProps> = connector((props: ICategoriesListProps) => {
     useEffect(() => {
         Socket.emit('getCategoriesList');
         const categoriesList$ = Socket.on<{ total: number; categories: ICategory[] }>('gotCategoriesList');
         categoriesList$.subscribe(
             ({ categories }) => {
-                console.log('CategoriesList', categories);
-                setCategoriesList({ categories });
+                console.log('getCategoriesList', categories);
+                props.setCategoriesList({ categories });
+            },
+            (err) => {
+                console.error('err', err);
+            },
+        );
+
+        Socket.emit('getTodosList');
+        const totoList$ = Socket.on<{ total: number; todos: ITodo[] }>('gotTodosList');
+        totoList$.subscribe(
+            ({ todos }) => {
+                console.log('getTodosList', todos);
+
+                props.setTodosList({ todos });
             },
             (err) => {
                 console.error('err', err);
@@ -24,29 +39,17 @@ export const CategoriesListComponent: React.FC = connector(({ authState, categor
 
         return () => {
             Socket.removeEventListener('gotCategoriesList');
+            Socket.removeEventListener('gotTodosList');
         };
-    }, [setCategoriesList]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const categoryCreating = (title: string) => {
         Socket.emit('createCategory', { title });
         const category$ = Socket.on<ICategory>('createdCategory');
-        category$.subscribe(
+        category$.pipe(take(1)).subscribe(
             (res) => {
-                console.log('New Category', res);
-                addCategory({ category: res });
-            },
-            (err) => {
-                console.error('err', err);
-            },
-        );
-    };
-
-    const todoCreating = (title: string) => {
-        Socket.emit('createTodo', { title });
-        const todo$ = Socket.on<ICategory>('createdTodo');
-        todo$.subscribe(
-            (res) => {
-                console.log('New Todo', res);
+                props.addCategory({ category: res });
             },
             (err) => {
                 console.error('err', err);
@@ -57,18 +60,13 @@ export const CategoriesListComponent: React.FC = connector(({ authState, categor
     return (
         <Fragment>
             <div className="row category__list">
-                {categoryState.categoriesList.map((category) => (
-                    <div className="col s12 m3 category__item">
-                        <div className="card-panel category__title">
-                            <span className="white-text">Title</span>
-                        </div>
-                        <TodoComponent />
-                        <AddButtonComponent onCreate={todoCreating} />
-                    </div>
+                {props.categoryState.categoriesList.map((category) => (
+                    // @ts-ignore
+                    <CategoryComponent key={category.id} categoryId={category.id} categoryTitle={category.title} />
                 ))}
 
                 <div className="col s12 m3 category__item">
-                    <AddButtonComponent onCreate={categoryCreating} />
+                    <AddButtonComponent text={'Create Category'} placeholder={'Enter Title'} onCreate={categoryCreating} />
                 </div>
             </div>
 

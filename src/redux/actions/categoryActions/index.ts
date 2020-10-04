@@ -1,10 +1,10 @@
-import { ADD_CATEGORY, REMOVE_CATEGORY, SET_CATEGORY_LIST, UPDATE_CATEGORY } from './../../types/categoryTypes';
+import { ADD_CATEGORY, REMOVE_CATEGORY, SET_CATEGORIES_LIST, UPDATE_CATEGORY } from './../../types/categoryTypes';
 import { IActionCreator } from './../../interfaces';
 import { ICategoriesPayload, ICategoryPayload } from './../../interfaces/categoryInterfaces';
 
 export const setCategoriesList = (payload: ICategoriesPayload): IActionCreator<ICategoriesPayload> => {
     return {
-        type: SET_CATEGORY_LIST,
+        type: SET_CATEGORIES_LIST,
         payload,
     };
 };
