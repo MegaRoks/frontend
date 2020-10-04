@@ -3,10 +3,12 @@ import { Link, NavLink } from 'react-router-dom';
 
 import './Header.style.scss';
 import { connector, IHeaderProps } from './componentProps';
+import { Socket } from './../../services/Socket.service';
 
 export const HeaderComponent = connector(({ authState, logout, userState }: IHeaderProps) => {
     const logoutHandler = () => {
         logout({ token: null });
+        Socket.disconnect();
     };
 
     return (

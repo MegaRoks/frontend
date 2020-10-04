@@ -5,6 +5,7 @@ import { setCategoriesList, addCategory, updateCategory, removeCategory } from '
 
 const mapStateToProps = (state: RootStateType) => ({
     categoryState: state.categoryState,
+    authState: state.authState,
 });
 
 const mapDispatchToProps = {

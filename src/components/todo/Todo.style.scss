@@ -1,8 +1,10 @@
 $main-color: #272727;
 $font-color: #fcfcfc;
 
-.todo__title {
-    height: 90px;
-    background-color: $main-color;
-    color: $font-color;
+.todo {
+    &__title {
+        height: 90px;
+        background-color: $main-color;
+        color: $font-color;
+    }
 }
