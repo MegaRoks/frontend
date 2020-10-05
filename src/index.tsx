@@ -1,18 +1,13 @@
 import React, { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
-import { compose, createStore } from 'redux';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
 
 import 'materialize-css';
 import './index.scss';
 import { AppComponent } from './App.component';
-import { rootReducer } from './redux';
+import { store } from './redux';
 import * as serviceWorker from './serviceWorker';
-
-const composeEnhancers = composeWithDevTools();
-const store = createStore(rootReducer, compose(composeEnhancers));
 
 const app: JSX.Element = (
     <StrictMode>

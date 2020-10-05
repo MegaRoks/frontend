@@ -1,55 +1,76 @@
-import { useRef, useState } from 'react';
+import { connect } from 'react-redux';
 
-interface IFnsValidators {
-    (element: HTMLInputElement): boolean;
-}
+import { IUserData } from './Auth.interface';
+import { Http } from './../../services/Http.service';
+import { Jwt } from './../../services/Jwt.service';
+import { Socket } from './../../services/Socket.service';
+import { RootDispatchType, RootStateType } from './../../redux';
+import { setError } from './../../redux/actions/errorActions';
+import { setLoader } from './../../redux/actions/loaderActions';
+import { login } from './../../redux/actions/authActions';
+import { setUser } from './../../redux/actions/userActions';
+import { IUser } from './../../interfaces/userInterfaces';
 
-export function useInput(initialValue: string | number, fnsValidator?: IFnsValidators[]) {
-    const [value, setValue] = useState(initialValue);
-    const ref = useRef<HTMLInputElement>(null);
+const mapStateToProps = (state: RootStateType) => ({
+    errorState: state.errorState,
+    loaderState: state.loaderState,
+});
 
-    const onChange = (event: any) => {
-        setValue(event.target.value);
+const mapDispatchToProps = (dispatch: RootDispatchType) => ({
+    singIn: (userData: IUserData, history: any) => dispatch(singIn(userData, history)),
+    signUp: (userData: IUserData, history: any) => dispatch(signUp(userData, history)),
+});
 
-        fnsValidator?.every((fn) => {
-            if (ref.current) {
-                const state = fn(ref.current);
-                if (state) {
-                    ref.current?.classList.remove('invalid');
-                    ref.current?.classList.add('valid');
-                    ref.current?.removeAttribute(`error-${ref.current?.id}`);
-                } else {
-                    ref.current?.classList.remove('valid');
-                    ref.current?.classList.add('invalid');
-                    ref.current?.setAttribute(`error-${ref.current?.id}`, 'true');
-                }
+export const connector = connect(mapStateToProps, mapDispatchToProps);
 
-                return state;
-            }
-        });
+export const singIn = (userData: IUserData, history: any) => {
+    return (dispatch: RootDispatchType) => {
+        dispatch(setLoader({ isLoader: true }));
+        const url = `${process.env.REACT_APP_SERVER_URL}/auth/sign-in`;
+        Http.post(url, userData).subscribe(
+            ({ response }) => {
+                console.log('signUp res: ', response);
+
+                const { user } = Jwt.decode<IUser>(response.token);
+                dispatch(setUser({ user }));
+                dispatch(login({ token: response.token }));
+                dispatch(setLoader({ isLoader: false }));
+                Socket.connect(response.token);
+                history.push('/dashboard');
+            },
+            (error) => {
+                M.toast({ html: error.message });
+                const payload = {
+                    isError: true,
+                    errorMessage: error.message,
+                };
+                dispatch(setError(payload));
+                dispatch(setLoader({ isLoader: false }));
+            },
+        );
     };
+};
 
-    return {
-        value,
-        onChange,
-        ref,
+export const signUp = (userData: IUserData, history: any) => {
+    return (dispatch: RootDispatchType) => {
+        dispatch(setLoader({ isLoader: true }));
+        const url = `${process.env.SERVER_URL}/auth/sign-up`;
+        Http.post(url, userData).subscribe(
+            ({ response }) => {
+                console.log('signUp res: ', response);
+
+                dispatch(setLoader({ isLoader: false }));
+                history.push('/confirm');
+            },
+            (error) => {
+                M.toast({ html: error.message });
+                const payload = {
+                    isError: true,
+                    errorMessage: error.message,
+                };
+                dispatch(setError(payload));
+                dispatch(setLoader({ isLoader: false }));
+            },
+        );
     };
-}
-
-export function useButton(...args: any[]) {
-    const fromRef = useRef<HTMLFormElement>(null);
-    const buttonRef = useRef<HTMLButtonElement>(null);
-
-    args.some((arg) => {
-        const isInput = fromRef.current?.getElementsByTagName('input').namedItem(arg.current?.id)?.getAttribute(`error-${arg.current?.id}`);
-        if (isInput) {
-            buttonRef.current?.setAttribute('disabled', 'true');
-        } else {
-            buttonRef.current?.removeAttribute('disabled');
-        }
-
-        return isInput;
-    });
-
-    return { fromRef, buttonRef };
-}
+};

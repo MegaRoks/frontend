@@ -1,15 +1,14 @@
 import React from 'react';
 
 import './Auth.style.scss';
-import { useButton, useInput } from './Auth.service';
-import { connector, IAuthProps } from './componentProps';
-import { Http } from './../../services/Http.service';
-import { Validators } from './../../services/Validators.service';
+import { IAuthProps } from './Auth.interface';
+import { connector } from './Auth.service';
+import { Validators, useButton, useInput } from './../../services/Validators.service';
 import { LoaderComponent } from './../loader/Loader.component';
 import { InputComponent } from './../UI/input/Input.component';
 import { ButtonComponent } from './../UI/button/Button.component';
 
-export const SignUpComponent: React.FC<IAuthProps> = connector(({ setError, loaderState, setLoader, history }: IAuthProps) => {
+export const SignUpComponent: React.FC<IAuthProps> = connector(({ loaderState, history, signUp }: IAuthProps) => {
     const inputFirstName = useInput('', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]);
     const inputLastName = useInput('', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]);
     const inputEmail = useInput('', [Validators.required, Validators.email(), Validators.maxLength(50)]);
@@ -24,31 +23,14 @@ export const SignUpComponent: React.FC<IAuthProps> = connector(({ setError, load
     const formRef = useButton(inputFirstName.ref, inputLastName.ref, inputEmail.ref, inputPassword.ref, inputConfirmPassword.ref);
 
     const signUpHandler = () => {
-        setLoader({ isLoader: true });
-        const url = `${process.env.SERVER_URL}/auth/sign-up`;
-        const body = {
+        const userData = {
             firstName: inputFirstName.value,
             lastName: inputLastName.value,
             email: inputEmail.value,
             password: inputPassword.value,
             passwordConfirmation: inputConfirmPassword.value,
         };
-
-        Http.post(url, body).subscribe(
-            (res) => {
-                console.log('res: ', res);
-                setLoader({ isLoader: false });
-                history.push('/confirm');
-            },
-            (error) => {
-                M.toast({ html: error.message });
-                setError({
-                    isError: true,
-                    errorMessage: error.message,
-                });
-                setLoader({ isLoader: false });
-            },
-        );
+        signUp(userData, history);
     };
 
     return (

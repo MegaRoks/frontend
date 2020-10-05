@@ -1,49 +1,24 @@
 import React from 'react';
 
 import './Auth.style.scss';
-import { useInput, useButton } from './Auth.service';
-import { connector, IAuthProps } from './componentProps';
-import { Http } from './../../services/Http.service';
-import { Jwt } from './../../services/Jwt.service';
-import { Socket } from './../../services/Socket.service';
-import { Validators } from './../../services/Validators.service';
+import { IAuthProps } from './Auth.interface';
+import { connector } from './Auth.service';
+import { Validators, useInput, useButton } from './../../services/Validators.service';
 import { LoaderComponent } from './../loader/Loader.component';
 import { InputComponent } from './../UI/input/Input.component';
 import { ButtonComponent } from './../UI/button/Button.component';
-import { IUser } from './../../interfaces/userInterfaces';
 
-
-export const SignInComponent: React.FC<IAuthProps> = connector(({ setError, loaderState, setLoader, history, login, setUser }: IAuthProps) => {
+export const SignInComponent: React.FC<IAuthProps> = connector(({ loaderState, history, singIn }: IAuthProps) => {
     const inputEmail = useInput('', [Validators.required, Validators.email(), Validators.maxLength(50)]);
     const inputPassword = useInput('', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]);
     const formRef = useButton(inputEmail.ref, inputPassword.ref);
 
     const signInHandler = () => {
-        setLoader({ isLoader: true });
-        const url = `${process.env.REACT_APP_SERVER_URL}/auth/sign-in`;
         const body = {
             email: inputEmail.value,
             password: inputPassword.value,
         };
-
-        Http.post(url, body).subscribe(
-            ({ response }) => {
-                const { user } = Jwt.decode<IUser>(response.token);
-                setUser({ user });
-                login({ token: response.token });
-                setLoader({ isLoader: false });
-                Socket.connect(response.token);
-                history.push('/dashboard');
-            },
-            (error) => {
-                M.toast({ html: error.message });
-                setError({
-                    isError: true,
-                    errorMessage: error.message,
-                });
-                setLoader({ isLoader: false });
-            },
-        );
+        singIn(body, history);
     };
 
     return (
