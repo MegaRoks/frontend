@@ -1,25 +1,14 @@
 import React from 'react';
-import { take } from 'rxjs/operators';
 
 import './Category.style.scss';
-import { connector, ICategoryProps } from './componentProps';
-import { Socket } from './../../services/Socket.service';
+import { ICategoryProps } from './Category.interface';
+import { connector } from './Category.service';
 import { AddButtonComponent } from './../addButton/AddButton.component';
 import { TodoComponent } from './../todo/Todo.component';
-import { ITodo } from './../../interfaces/todoInterfaces';
 
-export const CategoryComponent: React.FC<ICategoryProps> = connector(({ categoryId, categoryTitle, addTodo, todoState }: ICategoryProps) => {
-    const todoCreating = (title: string) => {
-        Socket.emit('createTodo', { title, categoryId });
-        const todo$ = Socket.on<ITodo>('createdTodo');
-        todo$.pipe(take(1)).subscribe(
-            (res) => {
-                addTodo({ todo: res });
-            },
-            (err) => {
-                console.error('err', err);
-            },
-        );
+export const CategoryComponent = connector(({ categoryId, categoryTitle, todoState, createTodo }: ICategoryProps) => {
+    const todoCreating = (title: React.ReactText) => {
+        createTodo(title, categoryId);
     };
 
     return (

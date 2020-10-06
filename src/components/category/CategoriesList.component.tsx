@@ -1,67 +1,32 @@
 import React, { Fragment, useEffect } from 'react';
-import { take } from 'rxjs/operators';
 
 import './Category.style.scss';
-import { connector, ICategoriesListProps } from './componentProps';
-import { ActionButtonComponent } from './../actionButton/ActionButton.component';
-import { Socket } from './../../services/Socket.service';
-import { ICategory } from './../../interfaces/categoryInterfaces';
-import { ITodo } from './../../interfaces/todoInterfaces';
-import { AddButtonComponent } from './../addButton/AddButton.component';
+import { ICategoriesListProps } from './Category.interface';
 import { CategoryComponent } from './Category.component';
+import { connector } from './Category.service';
+import { ActionButtonComponent } from './../actionButton/ActionButton.component';
+import { AddButtonComponent } from './../addButton/AddButton.component';
 
-export const CategoriesListComponent: React.FC<ICategoriesListProps> = connector((props: ICategoriesListProps) => {
+export const CategoriesListComponent = connector((props: ICategoriesListProps) => {
     useEffect(() => {
-        Socket.emit('getCategoriesList');
-        const categoriesList$ = Socket.on<{ total: number; categories: ICategory[] }>('gotCategoriesList');
-        categoriesList$.subscribe(
-            ({ categories }) => {
-                console.log('getCategoriesList', categories);
-                props.setCategoriesList({ categories });
-            },
-            (err) => {
-                console.error('err', err);
-            },
-        );
-
-        Socket.emit('getTodosList');
-        const totoList$ = Socket.on<{ total: number; todos: ITodo[] }>('gotTodosList');
-        totoList$.subscribe(
-            ({ todos }) => {
-                console.log('getTodosList', todos);
-
-                props.setTodosList({ todos });
-            },
-            (err) => {
-                console.error('err', err);
-            },
-        );
+        props.addCategoriesListener();
+        props.addTodosListener();
 
         return () => {
-            Socket.removeEventListener('gotCategoriesList');
-            Socket.removeEventListener('gotTodosList');
+            props.removeCategoriesListener();
+            props.removeTodosListener();
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const categoryCreating = (title: string) => {
-        Socket.emit('createCategory', { title });
-        const category$ = Socket.on<ICategory>('createdCategory');
-        category$.pipe(take(1)).subscribe(
-            (res) => {
-                props.addCategory({ category: res });
-            },
-            (err) => {
-                console.error('err', err);
-            },
-        );
+    const categoryCreating = (title: React.ReactText) => {
+        props.createCategory(title);
     };
 
     return (
         <Fragment>
             <div className="row category__list">
                 {props.categoryState.categoriesList.map((category) => (
-                    // @ts-ignore
                     <CategoryComponent key={category.id} categoryId={category.id} categoryTitle={category.title} />
                 ))}
 

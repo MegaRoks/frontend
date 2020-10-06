@@ -8,7 +8,7 @@ import { LoaderComponent } from './../loader/Loader.component';
 import { InputComponent } from './../UI/input/Input.component';
 import { ButtonComponent } from './../UI/button/Button.component';
 
-export const SignUpComponent: React.FC<IAuthProps> = connector(({ loaderState, history, signUp }: IAuthProps) => {
+export const SignUpComponent = connector(({ loaderState, history, signUp }: IAuthProps) => {
     const inputFirstName = useInput('', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]);
     const inputLastName = useInput('', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]);
     const inputEmail = useInput('', [Validators.required, Validators.email(), Validators.maxLength(50)]);

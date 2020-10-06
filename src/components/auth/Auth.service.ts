@@ -23,7 +23,7 @@ const mapDispatchToProps = (dispatch: RootDispatchType) => ({
 
 export const connector = connect(mapStateToProps, mapDispatchToProps);
 
-export const singIn = (userData: IUserData, history: any) => {
+const singIn = (userData: IUserData, history: any) => {
     return (dispatch: RootDispatchType) => {
         dispatch(setLoader({ isLoader: true }));
         const url = `${process.env.REACT_APP_SERVER_URL}/auth/sign-in`;
@@ -51,7 +51,7 @@ export const singIn = (userData: IUserData, history: any) => {
     };
 };
 
-export const signUp = (userData: IUserData, history: any) => {
+const signUp = (userData: IUserData, history: any) => {
     return (dispatch: RootDispatchType) => {
         dispatch(setLoader({ isLoader: true }));
         const url = `${process.env.SERVER_URL}/auth/sign-up`;

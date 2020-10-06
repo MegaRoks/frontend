@@ -8,7 +8,7 @@ import { LoaderComponent } from './../loader/Loader.component';
 import { InputComponent } from './../UI/input/Input.component';
 import { ButtonComponent } from './../UI/button/Button.component';
 
-export const SignInComponent: React.FC<IAuthProps> = connector(({ loaderState, history, singIn }: IAuthProps) => {
+export const SignInComponent = connector(({ loaderState, history, singIn }: IAuthProps) => {
     const inputEmail = useInput('', [Validators.required, Validators.email(), Validators.maxLength(50)]);
     const inputPassword = useInput('', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]);
     const formRef = useButton(inputEmail.ref, inputPassword.ref);

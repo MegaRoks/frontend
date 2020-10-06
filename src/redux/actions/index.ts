@@ -1,6 +1,7 @@
+import { ITaskPayload, ITasksPayload } from './../interfaces/taskInterfaces';
 import { IActionCreator } from './../interfaces';
 import { IAuthPayload } from './../interfaces/authInterfaces';
-import { ICategoryPayload } from './../interfaces/categoryInterfaces';
+import { ICategoriesPayload, ICategoryPayload } from './../interfaces/categoryInterfaces';
 import { IErrorPayload } from './../interfaces/errorInterfaces';
 import { ILoaderPayload } from './../interfaces/loaderInterfaces';
 import { ITodoPayload, ITodosPayload } from './../interfaces/todoInterfaces';
@@ -13,5 +14,8 @@ export type RootActionType =
     | IActionCreator<IUserPayload>
     | IActionCreator<ITodosPayload>
     | IActionCreator<ITodoPayload>
-    | IActionCreator<ICategoryPayload>;
+    | IActionCreator<ICategoryPayload>
+    | IActionCreator<ICategoriesPayload>
+    | IActionCreator<ITaskPayload>
+    | IActionCreator<ITasksPayload>;
 
