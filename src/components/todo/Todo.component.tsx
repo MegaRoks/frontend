@@ -16,6 +16,7 @@ const customStyles = {
         transform: 'translate(-50%, -50%)',
         width: '600px',
         height: '600px',
+        // overflow: 'hidden',
     },
 };
 
@@ -49,16 +50,28 @@ export const TodoComponent = connector((props: ITodoProps) => {
             </div>
 
             <Modal isOpen={isOpenModal} onRequestClose={closeModal} style={customStyles} contentLabel="Example Modal">
-                <h2>{props.todoTitle}</h2>
-                <button onClick={closeModal}>close</button>
+                <div className="task">
+                    <h2>{props.todoTitle}</h2>
 
-                {props.taskState.tasksList
-                    .filter((task) => task.todoId && task.todoId === props.todoId)
-                    .map((task) => (
-                        <div key={task.id}>{task.title}</div>
-                    ))}
+                    <div className="task__list">
+                        {props.taskState.tasksList
+                            .filter((task) => task.todoId && task.todoId === props.todoId)
+                            .map((task) => (
+                                <div key={task.id} className="task__item">
+                                    <label>
+                                        <input type="checkbox" className="task__checkbox" />
+                                        <span>{task.title}</span>
+                                    </label>
 
-                <AddButtonComponent text={'Create Todo'} placeholder={'Enter Title'} onCreate={taskCreating} />
+                                    <div className="task__container">
+                                        <small className="task__date">{task.createdAt}</small>
+                                        <button className="btn task__button task__button-remove">&times;</button>
+                                    </div>
+                                </div>
+                            ))}
+                    </div>
+                    <AddButtonComponent text={'Create Task'} placeholder={'Enter Title'} onCreate={taskCreating} />
+                </div>
             </Modal>
         </Fragment>
     );
