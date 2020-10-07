@@ -2,13 +2,12 @@ import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 
 import './Header.style.scss';
-import { connector, IHeaderProps } from './componentProps';
-import { Socket } from './../../services/Socket.service';
+import { IHeaderProps } from './Header.interface';
+import { connector } from './Header.service';
 
 export const HeaderComponent = connector(({ authState, logout, userState }: IHeaderProps) => {
     const logoutHandler = () => {
-        logout({ token: null });
-        Socket.disconnect();
+        logout();
     };
 
     return (

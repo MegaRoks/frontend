@@ -1,13 +1,12 @@
 import React, { Fragment, useEffect } from 'react';
 
-import './Category.style.scss';
-import { ICategoriesListProps } from './Category.interface';
-import { CategoryComponent } from './Category.component';
-import { connector } from './Category.service';
-import { ActionButtonComponent } from './../actionButton/ActionButton.component';
-import { AddButtonComponent } from './../addButton/AddButton.component';
+import './Dashboard.style.scss';
+import { IDashboardProps } from './Dashboard.interface';
+import { connector } from './Dashboard.service';
+import { CategoryComponent } from './../../components/category/Category.component';
+import { AddButtonComponent } from './../../components/addButton/AddButton.component';
 
-export const CategoriesListComponent = connector((props: ICategoriesListProps) => {
+export const DashboardComponent = connector((props: IDashboardProps) => {
     useEffect(() => {
         props.addCategoriesListener();
         props.addTodosListener();
@@ -25,7 +24,7 @@ export const CategoriesListComponent = connector((props: ICategoriesListProps) =
 
     return (
         <Fragment>
-            <div className="row category__list">
+            <div className="row dashboard">
                 {props.categoryState.categoriesList.map((category) => (
                     <CategoryComponent key={category.id} categoryId={category.id} categoryTitle={category.title} />
                 ))}
@@ -34,8 +33,6 @@ export const CategoriesListComponent = connector((props: ICategoriesListProps) =
                     <AddButtonComponent text={'Create Category'} placeholder={'Enter Title'} onCreate={categoryCreating} />
                 </div>
             </div>
-
-            <ActionButtonComponent />
         </Fragment>
     );
 });

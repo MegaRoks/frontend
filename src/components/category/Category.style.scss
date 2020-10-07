@@ -17,13 +17,4 @@ $font-color: #fcfcfc;
         background-color: $main-color;
         color: $font-color;
     }
-
-    &__list {
-        display: flex;
-        overflow-x: auto;
-        overflow-y: hidden;
-        white-space: nowrap;
-        height: 100%;
-        margin: 0;
-    }
 }

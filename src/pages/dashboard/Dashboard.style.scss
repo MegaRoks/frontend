@@ -1,0 +1,11 @@
+$main-color: #272727;
+$font-color: #fcfcfc;
+
+.dashboard {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    height: 100%;
+    margin: 0;
+}

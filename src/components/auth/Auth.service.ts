@@ -7,7 +7,7 @@ import { Socket } from './../../services/Socket.service';
 import { RootDispatchType, RootStateType } from './../../redux';
 import { setError } from './../../redux/actions/errorActions';
 import { setLoader } from './../../redux/actions/loaderActions';
-import { login } from './../../redux/actions/authActions';
+import { setAuth } from './../../redux/actions/authActions';
 import { setUser } from './../../redux/actions/userActions';
 import { IUser } from './../../interfaces/userInterfaces';
 
@@ -31,9 +31,10 @@ const singIn = (userData: IUserData, history: any) => {
             ({ response }) => {
                 console.log('signUp res: ', response);
 
+                localStorage.setItem('token', response.token);
                 const { user } = Jwt.decode<IUser>(response.token);
                 dispatch(setUser({ user }));
-                dispatch(login({ token: response.token }));
+                dispatch(setAuth({ isAuth: true, token: response.token }));
                 dispatch(setLoader({ isLoader: false }));
                 Socket.connect(response.token);
                 history.push('/dashboard');
