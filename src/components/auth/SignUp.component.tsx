@@ -8,7 +8,7 @@ import { LoaderComponent } from './../loader/Loader.component';
 import { InputComponent } from './../UI/input/Input.component';
 import { ButtonComponent } from './../UI/button/Button.component';
 
-export const SignUpComponent = connector(({ loaderState, history, signUp }: IAuthProps) => {
+export const SignUpComponent = connector(({ history, isLoader, signUp }: IAuthProps) => {
     const inputFirstName = useInput('', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]);
     const inputLastName = useInput('', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]);
     const inputEmail = useInput('', [Validators.required, Validators.email(), Validators.maxLength(50)]);
@@ -35,7 +35,7 @@ export const SignUpComponent = connector(({ loaderState, history, signUp }: IAut
 
     return (
         <div className="auth">
-            {loaderState.isLoader ? (
+            {isLoader ? (
                 <LoaderComponent />
             ) : (
                 <form className="col s12 auth__sign-up_form" ref={formRef.fromRef} onSubmit={signUpHandler}>

@@ -1,0 +1,41 @@
+$main-color: #272727;
+$font-color: #fcfcfc;
+
+.modal {
+    overflow: hidden;
+
+    width: 600px;
+    height: 600px;
+
+    &__content {
+        padding: 24px;
+        height: 100%;
+    }
+
+    &__button {
+        color: $font-color;
+        background-color: #272727;
+        box-shadow: none;
+        border-radius: 0;
+        width: 25px;
+        height: 25px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+
+        &-close {
+            position: fixed;
+            right: 24px;
+        }
+
+        &:hover {
+            background-color: #00aeef;
+        }
+
+        &:focus {
+            background-color: #00aeef;
+        }
+    }
+}

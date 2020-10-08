@@ -13,7 +13,7 @@ import { IUser } from './../../interfaces/userInterfaces';
 
 const mapStateToProps = (state: RootStateType) => ({
     errorState: state.errorState,
-    loaderState: state.loaderState,
+    isLoader: state.loaderState.isLoader,
 });
 
 const mapDispatchToProps = (dispatch: RootDispatchType) => ({

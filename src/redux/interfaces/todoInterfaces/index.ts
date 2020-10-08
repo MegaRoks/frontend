@@ -10,4 +10,5 @@ export interface ITodosPayload {
 
 export interface ITodoState {
     readonly todosList: ITodo[];
+    readonly selectedTodo: ITodo | null;
 }

@@ -5,6 +5,8 @@ import { IDashboardProps } from './Dashboard.interface';
 import { connector } from './Dashboard.service';
 import { CategoryComponent } from './../../components/category/Category.component';
 import { AddButtonComponent } from './../../components/addButton/AddButton.component';
+import { ModalComponent } from './../../components/modal/Modal.component';
+import { TaskComponent } from '../../components/task/Task.component';
 
 export const DashboardComponent = connector((props: IDashboardProps) => {
     useEffect(() => {
@@ -33,6 +35,10 @@ export const DashboardComponent = connector((props: IDashboardProps) => {
                     <AddButtonComponent text={'Create Category'} placeholder={'Enter Title'} onCreate={categoryCreating} />
                 </div>
             </div>
+
+            <ModalComponent>
+                <TaskComponent />
+            </ModalComponent>
         </Fragment>
     );
 });

@@ -13,8 +13,6 @@ export const taskReducer = (state: ITaskState = initialState, action: IActionCre
                 tasksList: action.payload.tasks,
             };
         case ADD_TASK: {
-            console.log(action.payload.task);
-
             return {
                 tasksList: [...state.tasksList, action.payload.task],
             };
