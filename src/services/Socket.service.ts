@@ -24,7 +24,9 @@ export class Socket {
         return fromEvent(this.socket, event);
     }
 
-    public static removeEventListener(event: string): void {
-        this.socket.removeEventListener(event);
+    public static removeEventsListener(...events: string[]): void {
+        events.forEach((event: string) => {
+            this.socket.removeEventListener(event);
+        });
     }
 }

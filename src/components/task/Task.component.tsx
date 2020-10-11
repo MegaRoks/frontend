@@ -19,6 +19,10 @@ export const TaskComponent = connector((props: ITaskProps) => {
         props.createTask(title);
     };
 
+    const taskRemoving = (taskId: string) => {
+        props.deleteTask(taskId);
+    };
+
     return (
         <div className="task">
             <h2>{props.selectTodo?.title}</h2>
@@ -35,7 +39,9 @@ export const TaskComponent = connector((props: ITaskProps) => {
 
                             <div className="task__container">
                                 <small className="task__date">{task.createdAt}</small>
-                                <button className="btn task__button task__button-remove">&times;</button>
+                                <button className="btn task__button task__button-remove" onClick={taskRemoving.bind(this, task.id)}>
+                                    &times;
+                                </button>
                             </div>
                         </div>
                     ))}

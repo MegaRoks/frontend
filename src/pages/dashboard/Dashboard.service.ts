@@ -42,7 +42,7 @@ const addCategoriesListener = () => {
 
 const removeCategoriesListener = () => {
     return () => {
-        Socket.removeEventListener('gotCategoriesList');
+        Socket.removeEventsListener('gotCategoriesList');
     };
 };
 
@@ -64,7 +64,7 @@ const addTodosListener = () => {
 
 const removeTodosListener = () => {
     return () => {
-        Socket.removeEventListener('gotTodosList');
+        Socket.removeEventsListener('gotTodosList');
     };
 };
 
