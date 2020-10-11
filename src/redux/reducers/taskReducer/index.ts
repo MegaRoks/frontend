@@ -18,8 +18,10 @@ export const taskReducer = (state: ITaskState = initialState, action: IActionCre
             };
         }
         case UPDATE_TASK: {
+            const tasksList = state.tasksList.filter((task) => (task.id === action.payload.task.id ? { ...task, ...action.payload.task } : task));
+
             return {
-                tasksList: [...state.tasksList.filter(({ id }) => id === action.payload.task.id), action.payload.task],
+                tasksList: [...state.tasksList.filter((task) => task.id !== action.payload.task.id), action.payload.task],
             };
         }
         case REMOVE_TASK: {

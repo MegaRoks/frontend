@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 
 import { Socket } from './../../services/Socket.service';
 import { RootDispatchType, RootStateType } from './../../redux';
-import { addTask, removeTask, setTasksList } from './../../redux/actions/taskActions';
+import { addTask, removeTask, setTasksList, updateTask } from './../../redux/actions/taskActions';
 import { ITask } from './../../interfaces/taskInterface.ts';
 
 const mapStateToProps = (state: RootStateType) => ({
@@ -16,6 +16,8 @@ const mapDispatchToProps = (dispatch: RootDispatchType) => ({
     addTasksListener: () => dispatch(addTasksListener()),
     removeTasksListener: () => dispatch(removeTasksListener()),
     createTask: (title: React.ReactText) => dispatch(createTask(title)),
+    changeStatus: (taskId: string, status: boolean) => dispatch(changeStatus(taskId, status)),
+    changeTitle: (taskId: string, title: React.ReactText) => dispatch(changeTitle(taskId, title)),
     deleteTask: (taskId: string) => dispatch(deleteTask(taskId)),
 });
 
@@ -26,9 +28,7 @@ const addTasksListener = () => {
         const todoId = getState().todoState.selectedTodo?.id;
         Socket.emit('getTasksList', { todoId });
         Socket.on<{ total: number; tasks: ITask[] }>('gotTasksList').subscribe(
-            ({ total, tasks }) => {
-                console.log('total', total);
-
+            ({ tasks }) => {
                 console.log('gotTasksList', tasks);
                 dispatch(setTasksList({ tasks }));
             },
@@ -40,6 +40,15 @@ const addTasksListener = () => {
             (task) => {
                 console.log('createdTask', task);
                 dispatch(addTask({ task }));
+            },
+            (err) => {
+                console.error('err', err);
+            },
+        );
+        Socket.on<ITask>('updatedTask').subscribe(
+            (task) => {
+                console.log('updatedTask', task);
+                dispatch(updateTask({ task }));
             },
             (err) => {
                 console.error('err', err);
@@ -59,7 +68,7 @@ const addTasksListener = () => {
 
 const removeTasksListener = () => {
     return () => {
-        Socket.removeEventsListener('gotTasksList', 'createdTask', 'deletedTask');
+        Socket.removeEventsListener('gotTasksList', 'createdTask', 'updatedTask', 'deletedTask');
     };
 };
 
@@ -67,6 +76,20 @@ const createTask = (title: React.ReactText) => {
     return (dispatch: RootDispatchType, getState: () => RootStateType) => {
         const todoId = getState().todoState.selectedTodo?.id;
         Socket.emit('createTask', { title, todoId });
+    };
+};
+
+const changeStatus = (id: string, status: boolean) => {
+    return (dispatch: RootDispatchType, getState: () => RootStateType) => {
+        const todoId = getState().todoState.selectedTodo?.id;
+        Socket.emit('updateTask', { id, todoId, status });
+    };
+};
+
+const changeTitle = (id: string, title: React.ReactText) => {
+    return (dispatch: RootDispatchType, getState: () => RootStateType) => {
+        const todoId = getState().todoState.selectedTodo?.id;
+        Socket.emit('updateTask', { id, todoId, title });
     };
 };
 
