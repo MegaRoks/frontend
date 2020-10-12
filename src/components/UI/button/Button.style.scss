@@ -1,9 +1,8 @@
-$main-color: #272727;
-$font-color: #fcfcfc;
+@import './../../../assets/styles/colors.scss';
 
 .button {
     color: $font-color;
-    background-color: #272727;
+    background-color: $main-color;
     box-shadow: none;
     border-radius: 0;
     width: 100%;

@@ -1,5 +1,4 @@
-$main-color: #272727;
-$font-color: #fcfcfc;
+@import './../../assets/styles/colors.scss';
 
 .todo {
     &__title {

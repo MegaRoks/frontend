@@ -17,19 +17,19 @@ export const todoReducer = (state: ITodoState = initialState, action: IActionCre
         case ADD_TODO: {
             return {
                 ...state,
-                todosList: [...state.todosList, action.payload.todo],
+                todosList: state.todosList.concat(action.payload.todo),
             };
         }
         case UPDATE_TODO: {
             return {
                 ...state,
-                todosList: [...state.todosList.filter(({ id }) => id === action.payload.todo.id), action.payload.todo],
+                todosList: state.todosList.map((todo) => (todo.id === action.payload.todo.id ? { ...todo, ...action.payload.todo } : todo)),
             };
         }
         case REMOVE_TODO: {
             return {
                 ...state,
-                todosList: [...state.todosList.filter(({ id }) => id !== action.payload.todo.id)],
+                todosList: state.todosList.filter(({ id }) => id !== action.payload.todo.id),
             };
         }
         case SELECT_TODO: {

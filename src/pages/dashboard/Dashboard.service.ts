@@ -1,12 +1,11 @@
 import { connect } from 'react-redux';
-import { take } from 'rxjs/operators';
 
 import { Socket } from './../../services/Socket.service';
 import { ICategory } from './../../interfaces/categoryInterfaces';
 import { ITodo } from './../../interfaces/todoInterfaces';
 import { RootDispatchType, RootStateType } from './../../redux';
-import { setCategoriesList, addCategory } from './../../redux/actions/categoryActions';
-import { setTodosList } from './../../redux/actions/todoActions';
+import { setCategoriesList, addCategory, updateCategory, removeCategory } from './../../redux/actions/categoryActions';
+import { addTodo, setTodosList } from './../../redux/actions/todoActions';
 
 const mapStateToProps = (state: RootStateType) => ({
     categoryState: state.categoryState,
@@ -27,11 +26,45 @@ export const connector = connect(mapStateToProps, mapDispatchToProps);
 const addCategoriesListener = () => {
     return (dispatch: RootDispatchType) => {
         Socket.emit('getCategoriesList');
-        const categoriesList$ = Socket.on<{ total: number; categories: ICategory[] }>('gotCategoriesList');
-        categoriesList$.subscribe(
+        Socket.on<{ total: number; categories: ICategory[] }>('gotCategoriesList').subscribe(
             ({ categories }) => {
                 console.log('getCategoriesList', categories);
                 dispatch(setCategoriesList({ categories }));
+            },
+            (err) => {
+                console.error('err', err);
+            },
+        );
+        Socket.on<ITodo>('createdTodo').subscribe(
+            (todo) => {
+                dispatch(addTodo({ todo }));
+            },
+            (err) => {
+                console.error('err', err);
+            },
+        );
+        Socket.on<ICategory>('createdCategory').subscribe(
+            (category) => {
+                console.log('createCategory', category);
+                dispatch(addCategory({ category }));
+            },
+            (err) => {
+                console.error('err', err);
+            },
+        );
+        Socket.on<ICategory>('updatedCategory').subscribe(
+            (category) => {
+                console.log('updatedCategory', category);
+                dispatch(updateCategory({ category }));
+            },
+            (err) => {
+                console.error('err', err);
+            },
+        );
+        Socket.on<ICategory>('deletedCategory').subscribe(
+            (category) => {
+                console.log('deletedCategory', category);
+                dispatch(removeCategory({ category }));
             },
             (err) => {
                 console.error('err', err);
@@ -42,15 +75,14 @@ const addCategoriesListener = () => {
 
 const removeCategoriesListener = () => {
     return () => {
-        Socket.removeEventsListener('gotCategoriesList');
+        Socket.removeEventsListener('gotCategoriesList', 'createdTodo', 'createdCategory');
     };
 };
 
 const addTodosListener = () => {
     return (dispatch: RootDispatchType) => {
         Socket.emit('getTodosList');
-        const totoList$ = Socket.on<{ total: number; todos: ITodo[] }>('gotTodosList');
-        totoList$.subscribe(
+        Socket.on<{ total: number; todos: ITodo[] }>('gotTodosList').subscribe(
             ({ todos }) => {
                 console.log('getTodosList', todos);
                 dispatch(setTodosList({ todos }));
@@ -69,18 +101,7 @@ const removeTodosListener = () => {
 };
 
 const createCategory = (title: React.ReactText) => {
-    return (dispatch: RootDispatchType) => {
+    return () => {
         Socket.emit('createCategory', { title });
-        const category$ = Socket.on<ICategory>('createdCategory');
-        category$.pipe(take(1)).subscribe(
-            (category) => {
-                console.log('createCategory', category);
-                dispatch(addCategory({ category }));
-            },
-            (err) => {
-                console.error('err', err);
-            },
-        );
     };
 };
-

@@ -1,10 +1,7 @@
 import { connect } from 'react-redux';
-import { take } from 'rxjs/operators';
 
 import { Socket } from './../../services/Socket.service';
-import { ITodo } from './../../interfaces/todoInterfaces';
 import { RootDispatchType, RootStateType } from './../../redux';
-import { addTodo } from './../../redux/actions/todoActions';
 
 const mapStateToProps = (state: RootStateType) => ({
     categoryState: state.categoryState,
@@ -13,21 +10,26 @@ const mapStateToProps = (state: RootStateType) => ({
 
 const mapDispatchToProps = (dispatch: RootDispatchType) => ({
     createTodo: (title: React.ReactText, categoryId: string) => dispatch(createTodo(title, categoryId)),
+    updateCategory: (categoryId: string, title: React.ReactText) => dispatch(updateCategory(categoryId, title)),
+    deleteCategory: (categoryId: string) => dispatch(deleteCategory(categoryId)),
 });
 
 export const connector = connect(mapStateToProps, mapDispatchToProps);
 
 const createTodo = (title: React.ReactText, categoryId: string) => {
-    return (dispatch: RootDispatchType) => {
+    return () => {
         Socket.emit('createTodo', { title, categoryId });
-        const todo$ = Socket.on<ITodo>('createdTodo');
-        todo$.pipe(take(1)).subscribe(
-            (todo) => {
-                dispatch(addTodo({ todo }));
-            },
-            (err) => {
-                console.error('err', err);
-            },
-        );
+    };
+};
+
+const updateCategory = (id: string, title: React.ReactText) => {
+    return () => {  
+        Socket.emit('updateCategory', { id, title });
+    };
+};
+
+const deleteCategory = (id: string) => {
+    return () => {
+        Socket.emit('deleteCategory', { id });
     };
 };

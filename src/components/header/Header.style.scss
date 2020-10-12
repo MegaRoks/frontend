@@ -1,9 +1,7 @@
-$main-color: #272727;
-$font-color: #fcfcfc;
+@import './../../assets/styles/colors.scss';
 
 .header {
-    &__search {
-    }
+    &__search {}
 
     &__user-info {
         display: flex;

@@ -3,9 +3,9 @@ import React, { Fragment, useRef, useState } from 'react';
 import { ButtonComponent } from './../UI/button/Button.component';
 import { InputComponent } from './../UI/input/Input.component';
 
-import './AddButton.style.scss';
+import './AddFrom.style.scss';
 
-export const AddButtonComponent: React.FC<any> = ({ text, placeholder, onCreate }) => {
+export const AddFormComponent: React.FC<any> = ({ text, placeholder, onCreate }) => {
     const [isShowInput, setIsShowInput] = useState(false);
     const [value, setValue] = useState('');
     const inputRef = useRef<HTMLInputElement>(null);

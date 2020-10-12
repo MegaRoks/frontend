@@ -4,9 +4,9 @@ import './Dashboard.style.scss';
 import { IDashboardProps } from './Dashboard.interface';
 import { connector } from './Dashboard.service';
 import { CategoryComponent } from './../../components/category/Category.component';
-import { AddButtonComponent } from './../../components/addButton/AddButton.component';
+import { AddFormComponent } from './../../components/addFrom/AddFrom.component';
 import { ModalComponent } from './../../components/modal/Modal.component';
-import { TaskComponent } from '../../components/task/Task.component';
+import { TaskComponent } from './../../components/task/Task.component';
 
 export const DashboardComponent = connector((props: IDashboardProps) => {
     useEffect(() => {
@@ -32,7 +32,7 @@ export const DashboardComponent = connector((props: IDashboardProps) => {
                 ))}
 
                 <div className="col s12 m3 category__item">
-                    <AddButtonComponent text={'Create Category'} placeholder={'Enter Title'} onCreate={categoryCreating} />
+                    <AddFormComponent text={'Create Category'} placeholder={'Enter Title'} onCreate={categoryCreating} />
                 </div>
             </div>
 

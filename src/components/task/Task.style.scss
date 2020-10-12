@@ -1,5 +1,4 @@
-$main-color: #272727;
-$font-color: #fcfcfc;
+@import './../../assets/styles/colors.scss';
 
 .task {
     display: flex;
@@ -20,6 +19,8 @@ $font-color: #fcfcfc;
         border-radius: 2px;
         margin-bottom: 0.5rem;
         height: 50px;
+        background-color: $main-color;
+        color: $font-color;
     }
 
     &__list {
@@ -28,74 +29,18 @@ $font-color: #fcfcfc;
         overflow-x: auto;
     }
 
+    &__title {
+        font-size: 16px !important;
+        background-color: $main-color;
+        color: $font-color;
+    }
+
     &__container {
         display: flex;
         align-items: center;
         justify-content: space-between;
-
-        &-edit {
-            background-color: #272727;
-        }
-    }
-
-    &__body {
         width: 100%;
         padding-right: 0.7rem;
-    }
-
-    &__buttons {
-        min-width: 55px;
-    }
-
-    &__button {
-        color: $font-color;
-        box-shadow: none;
-        border-radius: 0;
-        width: 25px;
-        height: 25px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0;
-
-        &-remove {
-            background-color: #272727;
-
-            &:focus {
-                background-color: #272727;
-            }
-        }
-
-        &-edit {
-            background-color: #272727;
-
-            &:focus {
-                background-color: #272727;
-            }
-        }
-
-        &-cancel {
-            color: #272727;
-            background-color: #fcfcfc;
-
-            &:focus {
-                background-color: #fcfcfc;
-            }
-        }
-
-        &-save {
-            color: #272727;
-            background-color: #fcfcfc;
-
-            &:focus {
-                background-color: #fcfcfc;
-            }
-        }
-
-        &:hover {
-            background-color: #00aeef;
-        }
     }
 
     &__checkbox:checked + span {

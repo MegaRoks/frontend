@@ -1,5 +1,4 @@
-$main-color: '#272727';
-$font-color: '#FCFCFC';
+@import './assets/styles/colors.scss';
 
 body {
     margin: 0;
@@ -19,5 +18,5 @@ code {
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: #272727;
+    background-color: $main-color;
 }

@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useRef } from 'react';
 
 import './Modal.style.scss';
 import { IModalProps } from './Modal.interface';
-import { LoaderComponent } from '../loader/Loader.component';
+import { LoaderComponent } from './../loader/Loader.component';
 import { connector } from './Modal.service';
 
 export const ModalComponent = connector(({ children, showLoader, hiddenLoader, isLoader }: IModalProps) => {

@@ -17,15 +17,17 @@ export const categoryReducer = (
             };
         case ADD_CATEGORY:
             return {
-                categoriesList: [...state.categoriesList, action.payload.category],
+                categoriesList: state.categoriesList.concat(action.payload.category),
             };
         case UPDATE_CATEGORY:
             return {
-                categoriesList: [...state.categoriesList.filter(({ id }) => id !== action.payload.category.id), action.payload.category],
+                categoriesList: state.categoriesList.map((category) =>
+                    category.id === action.payload.category.id ? { ...category, ...action.payload.category } : category,
+                ),
             };
         case REMOVE_CATEGORY:
             return {
-                categoriesList: [...state.categoriesList.filter(({ id }) => id !== action.payload.category.id)],
+                categoriesList: state.categoriesList.filter(({ id }) => id !== action.payload.category.id),
             };
         default:
             return state;
