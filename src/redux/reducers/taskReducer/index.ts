@@ -14,19 +14,17 @@ export const taskReducer = (state: ITaskState = initialState, action: IActionCre
             };
         case ADD_TASK: {
             return {
-                tasksList: [...state.tasksList, action.payload.task],
+                tasksList: state.tasksList.concat(action.payload.task),
             };
         }
         case UPDATE_TASK: {
-            const tasksList = state.tasksList.filter((task) => (task.id === action.payload.task.id ? { ...task, ...action.payload.task } : task));
-
             return {
-                tasksList: [...state.tasksList.filter((task) => task.id !== action.payload.task.id), action.payload.task],
+                tasksList: state.tasksList.map((task) => (task.id === action.payload.task.id ? { ...task, ...action.payload.task } : task)),
             };
         }
         case REMOVE_TASK: {
             return {
-                tasksList: [...state.tasksList.filter(({ id }) => id !== action.payload.task.id)],
+                tasksList: state.tasksList.filter(({ id }) => id !== action.payload.task.id),
             };
         }
         default:
